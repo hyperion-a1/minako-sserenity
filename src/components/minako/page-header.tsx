@@ -126,7 +126,23 @@ function FocusButton({ item, slugs }: { item: NavItem; slugs: string[] }) {
         focusOnly(item.to, slugs, best);
       }}
     >
-      <Focus className="h-4 w-4" /> Modo foco: {on ? "ligado" : "desligado"}
+      <Focus className="h-3.5 w-3.5 shrink-0" />
+      <span className="whitespace-nowrap">Modo foco</span>
+      <span className="sr-only">{on ? "ligado" : "desligado"}</span>
+      <span
+        aria-hidden
+        className={cn(
+          "relative h-4 w-8 shrink-0 rounded-full transition-colors duration-200",
+          on ? "bg-primary-foreground/70" : "bg-muted",
+        )}
+      >
+        <span
+          className={cn(
+            "absolute left-0.5 top-0.5 h-3 w-3 rounded-full transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)]",
+            on ? "translate-x-4 bg-primary-deep" : "translate-x-0 bg-muted-foreground/50",
+          )}
+        />
+      </span>
     </button>
   );
 }
