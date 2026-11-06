@@ -6,7 +6,8 @@ export const Route = createFileRoute("/auth/login")({
       GET: async ({ request }) => {
         const clientId = process.env["DISCORD_CLIENT_ID"];
         if (!clientId) return new Response("Login com Discord ainda não configurado.", { status: 503 });
-        const origin = new URL(request.url).origin;
+        const { publicOrigin } = await import("@/lib/minako/origin.server");
+        const origin = publicOrigin(request);
         const state = Array.from(crypto.getRandomValues(new Uint8Array(24)), (b) => b.toString(16).padStart(2, "0")).join("");
         const params = new URLSearchParams({
           client_id: clientId,

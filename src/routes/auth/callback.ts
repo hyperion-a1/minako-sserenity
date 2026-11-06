@@ -14,7 +14,8 @@ export const Route = createFileRoute("/auth/callback")({
         const state = url.searchParams.get("state") ?? "";
         if (!code || code.length > 4096 || !state || state !== readSessionState()) return back("erro");
         try {
-          await finishLogin(code, `${url.origin}/auth/callback`);
+          const { publicOrigin } = await import("@/lib/minako/origin.server");
+          await finishLogin(code, `${publicOrigin(request)}/auth/callback`);
           return back();
         } catch (e) {
           console.error("[Login] Falha:", e instanceof Error ? e.message : e);
