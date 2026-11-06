@@ -1,3 +1,4 @@
+import { explainGuildDataError } from "./guild-data-error";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { guildFromDiscord, type BotGuildData } from "./bot-mapping";
@@ -101,7 +102,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       const res = await loadPanelGuild({ data: { guildId: id } });
       const cfg = res.config;
       if ("error" in res.guildData) {
-        setGuildWarning(`A Minako não conseguiu ler os canais e cargos deste servidor. Ela está no servidor? (${res.guildData.error})`);
+        setGuildWarning(explainGuildDataError(res.guildData.error));
       } else {
         const full = guildFromDiscord(meta, res.guildData as BotGuildData);
         setGuildList((list) => list.map((g) => (g.id === id ? full : g)));

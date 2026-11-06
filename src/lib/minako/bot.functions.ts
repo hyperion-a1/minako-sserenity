@@ -37,7 +37,7 @@ async function bot<T>(token: string, path: string, init?: RequestInit): Promise<
     const body = (await res.json().catch(() => ({}))) as { error?: string };
     if (res.ok) return body as T;
     last = body.error || `O bot respondeu com erro (${res.status}).`;
-    const throttled = (res.status === 403 && /membro/i.test(last)) || (res.status === 502 && /verificar/i.test(last));
+    const throttled = (res.status === 403 && /membro/i.test(last)) || (res.status === 502 && /verificar|HTTP 429|HTTP 5\d\d|timeout/i.test(last));
     if (!throttled) break;
   }
   throw new PanelError(last);
