@@ -178,35 +178,36 @@ function Overview() {
             <p className="text-sm text-muted-foreground">Ligue e desligue com um toque. Depois é só salvar!</p>
           </div>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3">
           {features.map((f, i) => {
             const Icon = f.nav.icon;
             return (
               <article
                 key={f.nav.id}
                 className={cn(
-                  "squish-card group animate-rise p-5 transition-colors duration-300",
+                  "squish-card group flex min-w-0 animate-rise items-center gap-3 rounded-[1.4rem] py-2.5 pl-2.5 pr-3 transition-colors duration-300",
                   f.on ? "border-primary/60" : "opacity-95",
                 )}
                 style={{ animationDelay: `${150 + i * 60}ms` }}
               >
-                <div className="flex items-start gap-3">
-                  <span className={cn("grid h-12 w-12 shrink-0 place-items-center rounded-2xl transition-transform group-hover:-rotate-6", f.nav.tone)}>
-                    <Icon className="h-6 w-6" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="font-display text-lg font-semibold leading-tight">{f.nav.label}</h3>
-                    <p className="truncate text-sm text-muted-foreground">{f.status}</p>
-                  </div>
-                  <ToggleWithFx checked={f.on} onChange={f.toggle} label={f.nav.label} />
-                </div>
                 <Link
                   to={f.nav.to}
                   onClick={() => playSound("nav")}
-                  className="mt-4 inline-flex items-center gap-1 font-display text-sm font-semibold text-primary-deep transition-all hover:gap-2"
+                  aria-label={`Configurar ${f.nav.label}`}
+                  className="flex min-w-0 flex-1 items-center gap-3"
                 >
-                  Configurar <ArrowRight className="h-4 w-4" />
+                  <span className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-2xl transition-transform group-hover:-rotate-6 group-active:scale-90", f.nav.tone)}>
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center gap-1 font-display text-[15px] font-semibold leading-tight">
+                      <span className="truncate">{f.nav.label}</span>
+                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary-deep opacity-60 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                    <span className="block truncate text-xs text-muted-foreground">{f.status}</span>
+                  </span>
                 </Link>
+                <ToggleWithFx checked={f.on} onChange={f.toggle} label={f.nav.label} />
               </article>
             );
           })}

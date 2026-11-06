@@ -20,6 +20,7 @@ import { BurstLayer, FloatingSky } from "./effects";
 import { NAV_ITEMS, SUPPORT_URL } from "./modules";
 import { BottomTabs, GroupedNav, SearchButton, SearchProvider } from "./navigator";
 import { SaveBar } from "./save-bar";
+import { ScrollProgress } from "./scroll-progress";
 import { playSound } from "./use-sound";
 
 function Brand({ compact }: { compact?: boolean }) {
@@ -180,6 +181,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen">
       <FloatingSky />
       <BurstLayer />
+      <ScrollProgress />
 
       {/* Barra lateral (computador) */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-[300px] flex-col gap-5 overflow-y-auto border-r-2 border-border bg-sidebar/85 p-5 backdrop-blur lg:flex">
