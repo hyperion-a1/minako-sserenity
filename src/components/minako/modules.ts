@@ -31,7 +31,21 @@ export interface NavItem {
   icon: LucideIcon;
   /** classes do "bolinho" colorido do ícone */
   tone: string;
+  category: CategoryId;
+  /** títulos das seções da página (para busca e modo foco) */
+  sections: string[];
+  /** palavras extras para a busca */
+  keywords: string;
 }
+
+export type CategoryId = "inicio" | "basico" | "comunidade" | "clima";
+
+export const CATEGORIES: { id: CategoryId; label: string; emoji: string }[] = [
+  { id: "inicio", label: "Início", emoji: "🏠" },
+  { id: "basico", label: "Ferramentas básicas", emoji: "🧰" },
+  { id: "comunidade", label: "Comunidade e eventos", emoji: "🎉" },
+  { id: "clima", label: "Clima e personalidade", emoji: "🌙" },
+];
 
 export const NAV_ITEMS: NavItem[] = [
   { id: "overview", to: "/", label: "Visão geral", short: "Início", description: "Resumo de tudo", icon: House, tone: "bg-primary text-primary-foreground" },
