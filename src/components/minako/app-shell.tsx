@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import { AudioControl } from "./audio-control";
 import { BurstLayer, FloatingSky } from "./effects";
 import { NAV_ITEMS, SUPPORT_URL } from "./modules";
+import { BottomTabs, GroupedNav, SearchButton, SearchProvider } from "./navigator";
 import { SaveBar } from "./save-bar";
 import { playSound } from "./use-sound";
 
@@ -132,46 +133,6 @@ function StatusBanner() {
   );
 }
 
-function NavList({ onNavigate }: { onNavigate?: () => void }) {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  return (
-    <nav aria-label="Módulos da Minako" className="space-y-1">
-      {NAV_ITEMS.map((item) => {
-        const active = pathname === item.to;
-        const Icon = item.icon;
-        return (
-          <Link
-            key={item.id}
-            to={item.to}
-            onClick={() => {
-              if (!active) playSound("nav");
-              onNavigate?.();
-            }}
-            className={cn(
-              "group flex items-center gap-3 rounded-2xl border-2 px-2.5 py-2 transition-all duration-200",
-              active
-                ? "border-primary-deep/40 bg-secondary shadow-squish-sm"
-                : "border-transparent hover:translate-x-1 hover:bg-secondary/60",
-            )}
-          >
-            <span
-              className={cn(
-                "grid h-9 w-9 shrink-0 place-items-center rounded-xl transition-transform group-hover:rotate-6",
-                item.tone,
-              )}
-            >
-              <Icon className="h-[18px] w-[18px]" />
-            </span>
-            <span className="min-w-0">
-              <span className="block truncate font-display text-sm font-semibold">{item.label}</span>
-              <span className="block truncate text-xs text-muted-foreground">{item.description}</span>
-            </span>
-          </Link>
-        );
-      })}
-    </nav>
-  );
-}
 
 function LegalLinks({ className, onNavigate }: { className?: string; onNavigate?: () => void }) {
   return (
@@ -208,35 +169,6 @@ function LegalLinks({ className, onNavigate }: { className?: string; onNavigate?
   );
 }
 
-function MobileChips() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  return (
-    <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:hidden">
-      {NAV_ITEMS.map((item) => {
-        const active = pathname === item.to;
-        const Icon = item.icon;
-        return (
-          <Link
-            key={item.id}
-            to={item.to}
-            onClick={() => !active && playSound("nav")}
-            className={cn(
-              "flex shrink-0 items-center gap-1.5 rounded-full border-2 py-1.5 pl-1.5 pr-3 font-display text-sm font-semibold transition-all",
-              active
-                ? "border-primary-deep bg-primary text-primary-foreground shadow-[var(--shadow-squish-primary)]"
-                : "border-border bg-card text-muted-foreground",
-            )}
-          >
-            <span className={cn("grid h-6 w-6 place-items-center rounded-full", active ? "bg-card/60" : item.tone)}>
-              <Icon className="h-3.5 w-3.5" />
-            </span>
-            {item.short}
-          </Link>
-        );
-      })}
-    </div>
-  );
-}
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -244,6 +176,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const isLegal = pathname === "/termos" || pathname === "/privacidade";
 
   return (
+    <SearchProvider>
     <div className="min-h-screen">
       <FloatingSky />
       <BurstLayer />
@@ -253,15 +186,16 @@ export function AppShell({ children }: { children: ReactNode }) {
         <Brand />
         <GuildSwitcher />
         <AccountBox />
-        <NavList />
+        <SearchButton />
+        <GroupedNav />
         <div className="mt-auto rounded-3xl border-2 border-dashed border-border-strong/60 p-2">
           <LegalLinks />
         </div>
       </aside>
 
       {/* Topo (celular) */}
-      <header className="sticky top-0 z-30 border-b-2 border-border bg-background/85 px-4 pb-3 pt-3 backdrop-blur lg:hidden">
-        <div className="mb-3 flex items-center gap-3">
+      <header className="sticky top-0 z-30 border-b-2 border-border bg-background/85 px-4 py-2.5 backdrop-blur lg:hidden">
+        <div className="flex items-center gap-3">
           <Brand compact />
           <div className="ml-auto flex min-w-0 items-center gap-2">
             <div className="min-w-0 max-w-[10rem]">
@@ -284,7 +218,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <Brand />
                   <GuildSwitcher />
                   <AccountBox />
-                  <NavList onNavigate={() => setMenuOpen(false)} />
+                  <GroupedNav onNavigate={() => setMenuOpen(false)} />
                   <div className="rounded-3xl border-2 border-dashed border-border-strong/60 p-2">
                     <LegalLinks onNavigate={() => setMenuOpen(false)} />
                   </div>
@@ -293,11 +227,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Sheet>
           </div>
         </div>
-        {!isLegal && <MobileChips />}
       </header>
 
       <div className="lg:pl-[300px]">
-        <main key={pathname} className="mx-auto w-full max-w-5xl animate-rise px-4 pb-32 pt-6 sm:px-6 lg:px-10 lg:pt-10">
+        <main key={pathname} className="mx-auto w-full max-w-5xl animate-rise px-4 pb-40 pt-5 sm:px-6 lg:px-10 lg:pt-10">
           {!isLegal && <StatusBanner />}
           {children}
         </main>
@@ -323,10 +256,12 @@ export function AppShell({ children }: { children: ReactNode }) {
         </footer>
       </div>
 
-      <div className="fixed bottom-3 right-3 z-50 sm:bottom-5 sm:right-5">
+      <div className="fixed bottom-[5.25rem] right-3 z-50 lg:bottom-5 lg:right-5">
         <AudioControl />
       </div>
       <SaveBar />
+      <BottomTabs onMenu={() => setMenuOpen(true)} />
     </div>
+    </SearchProvider>
   );
 }

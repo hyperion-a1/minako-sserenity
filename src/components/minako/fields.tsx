@@ -1,5 +1,8 @@
-import { Check, Hash, Megaphone, Minus, Plus, X, Folder, MessagesSquare, type LucideIcon } from "lucide-react";
-import { useId, useRef, useState, type ReactNode } from "react";
+import { useRouterState } from "@tanstack/react-router";
+import { Check, ChevronDown, Hash, Megaphone, Minus, Plus, X, Folder, MessagesSquare, type LucideIcon } from "lucide-react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+
+import { scrollToPending, sectionKey, setCollapsed, slugify, useCollapsed } from "@/lib/minako/sections";
 
 import { Switch } from "@/components/ui/switch";
 import {
@@ -37,23 +40,51 @@ export function SectionCard({
   className?: string | undefined;
   delay?: number | undefined;
 }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const slug = slugify(title);
+  const key = sectionKey(pathname, slug);
+  const collapsed = useCollapsed(key);
+  const bodyId = useId();
+  useEffect(() => {
+    scrollToPending(pathname);
+  }, [pathname]);
   return (
     <section
-      className={cn("squish-card animate-rise p-5 sm:p-6", className)}
+      id={`secao-${slug}`}
+      className={cn("squish-card animate-rise scroll-mt-24 p-4 sm:p-6", className)}
       style={{ animationDelay: `${delay}ms` }}
     >
-      <header className="mb-5 flex items-start gap-3">
+      <button
+        type="button"
+        aria-expanded={!collapsed}
+        aria-controls={bodyId}
+        onClick={() => {
+          playSound("tick");
+          setCollapsed(key, !collapsed);
+        }}
+        className={cn("flex w-full items-start gap-3 text-left", !collapsed && "mb-5")}
+      >
         {Icon && (
           <span className={cn("grid h-11 w-11 shrink-0 place-items-center rounded-2xl", tone)}>
             <Icon className="h-5 w-5" />
           </span>
         )}
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h2 className="text-lg font-semibold leading-tight">{title}</h2>
-          {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+          {description && !collapsed && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
+          {collapsed && <p className="mt-0.5 text-xs font-semibold text-muted-foreground">Recolhida · toque para abrir</p>}
         </div>
-      </header>
-      <div className="space-y-5">{children}</div>
+        <ChevronDown
+          aria-hidden
+          className={cn("mt-2 h-5 w-5 shrink-0 text-muted-foreground transition-transform", collapsed ? "-rotate-90" : "")}
+        />
+        <span className="sr-only">{collapsed ? "Abrir seção" : "Recolher seção"}</span>
+      </button>
+      {!collapsed && (
+        <div id={bodyId} className="space-y-5">
+          {children}
+        </div>
+      )}
     </section>
   );
 }
