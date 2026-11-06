@@ -15,3 +15,4 @@
 - Sounds are synthesized with Web Audio in `src/lib/minako/sound.ts` (no audio files); music never auto-starts. Why: browser autoplay policies and zero external assets.
 - Terms/Privacy texts are source files in `src/content/*.txt`, rendered via `parseLegal`; update the .txt to change the pages. Why: the owner edits them as plain text.
 - Giveaway message blocks use the bot's four supported shapes; publishing and template saving require an advertised API V2 capability to avoid silently losing blocks. Markdown preview replaces custom emoji text nodes with Discord CDN images and preserves code literals.
+- Navigation metadata (category, section titles, search keywords) lives in `src/components/minako/modules.ts`; SectionCard titles must match `sections` there so search/focus chips can jump to them. Collapse state and recents are per-browser (`src/lib/minako/sections.ts`). Why: one list drives sidebar, mobile tabs and search.
