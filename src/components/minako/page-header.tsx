@@ -71,20 +71,22 @@ function SectionTools({ item }: { item: NavItem }) {
     "flex shrink-0 items-center gap-1.5 rounded-full border-2 border-border bg-secondary px-3 py-1.5 font-display text-sm font-semibold text-secondary-foreground";
   return (
     <div className="mt-4">
-      <p className="mb-1.5 text-xs font-semibold text-muted-foreground">Ir para a seção:</p>
-      <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2">
+        <p className="min-w-0 truncate text-xs font-semibold text-muted-foreground">Ir para a seção:</p>
+        <FocusButton item={item} slugs={slugs} />
+      </div>
+      <div className="no-scrollbar -mx-4 mt-1.5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
         {item.sections.map((s) => (
           <SectionChip key={s} item={item} title={s} />
         ))}
       </div>
-      <div className="no-scrollbar -mx-4 mt-2 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
-        <button type="button" className={btn} onClick={() => { playSound("off"); setAll(item.to, slugs, true); }}>
-          <ChevronsDownUp className="h-4 w-4" /> Recolher tudo
+      <div className="mt-2 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+        <button type="button" className={cn(btn, "w-full sm:w-auto")} onClick={() => { playSound("off"); setAll(item.to, slugs, true); }}>
+          <ChevronsDownUp className="h-4 w-4 shrink-0" /> Recolher tudo
         </button>
-        <button type="button" className={btn} onClick={() => { playSound("on"); setAll(item.to, slugs, false); }}>
-          <ChevronsUpDown className="h-4 w-4" /> Abrir tudo
+        <button type="button" className={cn(btn, "w-full sm:w-auto")} onClick={() => { playSound("on"); setAll(item.to, slugs, false); }}>
+          <ChevronsUpDown className="h-4 w-4 shrink-0" /> Abrir tudo
         </button>
-        <FocusButton item={item} slugs={slugs} />
       </div>
     </div>
   );
@@ -99,7 +101,7 @@ function FocusButton({ item, slugs }: { item: NavItem; slugs: string[] }) {
       aria-checked={on}
       title="Com o modo foco, abrir uma seção fecha as outras sozinhas"
       className={cn(
-        "flex shrink-0 items-center gap-1.5 rounded-full border-2 px-3 py-1.5 font-display text-sm font-semibold transition-all active:scale-95",
+        "flex max-w-full shrink-0 items-center gap-1.5 rounded-full border-2 px-2.5 py-1 font-display text-xs font-semibold transition-all active:scale-95",
         on
           ? "border-primary-deep/50 bg-primary text-primary-foreground shadow-[var(--shadow-squish-primary)]"
           : "border-dashed border-border bg-transparent text-muted-foreground",
