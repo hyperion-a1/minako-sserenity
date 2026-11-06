@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as SwitchPrimitives from "@radix-ui/react-switch";
+import { Heart } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -9,7 +10,7 @@ const Switch = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(
-      "peer inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input",
+      "group peer inline-flex h-8 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 p-0.5 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary-deep data-[state=checked]:bg-primary data-[state=unchecked]:border-border-strong data-[state=unchecked]:bg-muted",
       className,
     )}
     {...props}
@@ -17,9 +18,11 @@ const Switch = React.forwardRef<
   >
     <SwitchPrimitives.Thumb
       className={cn(
-        "pointer-events-none block h-4 w-4 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0",
+        "pointer-events-none flex h-6 w-6 items-center justify-center rounded-full bg-card shadow-squish-sm ring-0 transition-transform duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] data-[state=checked]:translate-x-6 data-[state=unchecked]:translate-x-0",
       )}
-    />
+    >
+      <Heart className="h-3.5 w-3.5 fill-ribbon text-ribbon opacity-0 transition-all duration-300 group-data-[state=checked]:scale-100 group-data-[state=checked]:opacity-100 group-data-[state=unchecked]:scale-50" />
+    </SwitchPrimitives.Thumb>
   </SwitchPrimitives.Root>
 ));
 Switch.displayName = SwitchPrimitives.Root.displayName;

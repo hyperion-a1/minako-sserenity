@@ -10,33 +10,193 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CanaisRouteImport } from './routes/canais'
+import { Route as CargosRouteImport } from './routes/cargos'
+import { Route as MatchmakingRouteImport } from './routes/matchmaking'
+import { Route as NoturnoRouteImport } from './routes/noturno'
+import { Route as PersonalidadeRouteImport } from './routes/personalidade'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
+import { Route as SemanaRouteImport } from './routes/semana'
+import { Route as SorteiosRouteImport } from './routes/sorteios'
+import { Route as TermosRouteImport } from './routes/termos'
+import { Route as TiktokRouteImport } from './routes/tiktok'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CanaisRoute = CanaisRouteImport.update({
+  id: '/canais',
+  path: '/canais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CargosRoute = CargosRouteImport.update({
+  id: '/cargos',
+  path: '/cargos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatchmakingRoute = MatchmakingRouteImport.update({
+  id: '/matchmaking',
+  path: '/matchmaking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoturnoRoute = NoturnoRouteImport.update({
+  id: '/noturno',
+  path: '/noturno',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PersonalidadeRoute = PersonalidadeRouteImport.update({
+  id: '/personalidade',
+  path: '/personalidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SemanaRoute = SemanaRouteImport.update({
+  id: '/semana',
+  path: '/semana',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SorteiosRoute = SorteiosRouteImport.update({
+  id: '/sorteios',
+  path: '/sorteios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermosRoute = TermosRouteImport.update({
+  id: '/termos',
+  path: '/termos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TiktokRoute = TiktokRouteImport.update({
+  id: '/tiktok',
+  path: '/tiktok',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/canais': typeof CanaisRoute
+  '/cargos': typeof CargosRoute
+  '/matchmaking': typeof MatchmakingRoute
+  '/noturno': typeof NoturnoRoute
+  '/personalidade': typeof PersonalidadeRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/semana': typeof SemanaRoute
+  '/sorteios': typeof SorteiosRoute
+  '/termos': typeof TermosRoute
+  '/tiktok': typeof TiktokRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/canais': typeof CanaisRoute
+  '/cargos': typeof CargosRoute
+  '/matchmaking': typeof MatchmakingRoute
+  '/noturno': typeof NoturnoRoute
+  '/personalidade': typeof PersonalidadeRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/semana': typeof SemanaRoute
+  '/sorteios': typeof SorteiosRoute
+  '/termos': typeof TermosRoute
+  '/tiktok': typeof TiktokRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/canais': typeof CanaisRoute
+  '/cargos': typeof CargosRoute
+  '/matchmaking': typeof MatchmakingRoute
+  '/noturno': typeof NoturnoRoute
+  '/personalidade': typeof PersonalidadeRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/semana': typeof SemanaRoute
+  '/sorteios': typeof SorteiosRoute
+  '/termos': typeof TermosRoute
+  '/tiktok': typeof TiktokRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/auth/login': typeof AuthLoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/canais'
+    | '/cargos'
+    | '/matchmaking'
+    | '/noturno'
+    | '/personalidade'
+    | '/privacidade'
+    | '/semana'
+    | '/sorteios'
+    | '/termos'
+    | '/tiktok'
+    | '/auth/callback'
+    | '/auth/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/canais'
+    | '/cargos'
+    | '/matchmaking'
+    | '/noturno'
+    | '/personalidade'
+    | '/privacidade'
+    | '/semana'
+    | '/sorteios'
+    | '/termos'
+    | '/tiktok'
+    | '/auth/callback'
+    | '/auth/login'
+  id:
+    | '__root__'
+    | '/'
+    | '/canais'
+    | '/cargos'
+    | '/matchmaking'
+    | '/noturno'
+    | '/personalidade'
+    | '/privacidade'
+    | '/semana'
+    | '/sorteios'
+    | '/termos'
+    | '/tiktok'
+    | '/auth/callback'
+    | '/auth/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CanaisRoute: typeof CanaisRoute
+  CargosRoute: typeof CargosRoute
+  MatchmakingRoute: typeof MatchmakingRoute
+  NoturnoRoute: typeof NoturnoRoute
+  PersonalidadeRoute: typeof PersonalidadeRoute
+  PrivacidadeRoute: typeof PrivacidadeRoute
+  SemanaRoute: typeof SemanaRoute
+  SorteiosRoute: typeof SorteiosRoute
+  TermosRoute: typeof TermosRoute
+  TiktokRoute: typeof TiktokRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
+  AuthLoginRoute: typeof AuthLoginRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +208,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/canais': {
+      id: '/canais'
+      path: '/canais'
+      fullPath: '/canais'
+      preLoaderRoute: typeof CanaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cargos': {
+      id: '/cargos'
+      path: '/cargos'
+      fullPath: '/cargos'
+      preLoaderRoute: typeof CargosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/matchmaking': {
+      id: '/matchmaking'
+      path: '/matchmaking'
+      fullPath: '/matchmaking'
+      preLoaderRoute: typeof MatchmakingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noturno': {
+      id: '/noturno'
+      path: '/noturno'
+      fullPath: '/noturno'
+      preLoaderRoute: typeof NoturnoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/personalidade': {
+      id: '/personalidade'
+      path: '/personalidade'
+      fullPath: '/personalidade'
+      preLoaderRoute: typeof PersonalidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/semana': {
+      id: '/semana'
+      path: '/semana'
+      fullPath: '/semana'
+      preLoaderRoute: typeof SemanaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sorteios': {
+      id: '/sorteios'
+      path: '/sorteios'
+      fullPath: '/sorteios'
+      preLoaderRoute: typeof SorteiosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termos': {
+      id: '/termos'
+      path: '/termos'
+      fullPath: '/termos'
+      preLoaderRoute: typeof TermosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tiktok': {
+      id: '/tiktok'
+      path: '/tiktok'
+      fullPath: '/tiktok'
+      preLoaderRoute: typeof TiktokRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CanaisRoute: CanaisRoute,
+  CargosRoute: CargosRoute,
+  MatchmakingRoute: MatchmakingRoute,
+  NoturnoRoute: NoturnoRoute,
+  PersonalidadeRoute: PersonalidadeRoute,
+  PrivacidadeRoute: PrivacidadeRoute,
+  SemanaRoute: SemanaRoute,
+  SorteiosRoute: SorteiosRoute,
+  TermosRoute: TermosRoute,
+  TiktokRoute: TiktokRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
+  AuthLoginRoute: AuthLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

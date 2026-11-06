@@ -1,0 +1,6 @@
+[
+{"capability":"code","source":"archive (TanStack Start)","outcome":"migrate","status":"done","next_action":null},
+{"capability":"database/records","source":"none; panel config held by external Minako bot API + browser storage","outcome":"preserve","status":"n/a","next_action":null},
+{"capability":"auth","source":"Discord OAuth with signed session cookie","outcome":"preserve","status":"pending","next_action":"Add DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, SESSION_SECRET; update Discord redirect URL"},
+{"capability":"external bot API","source":"MINAKO_API_URL","outcome":"preserve","status":"pending","next_action":"Add MINAKO_API_URL secret"}
+]
