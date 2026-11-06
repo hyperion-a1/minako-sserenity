@@ -1,8 +1,17 @@
 import { useRouterState } from "@tanstack/react-router";
 import { Check, ChevronDown, Hash, Megaphone, Minus, Plus, X, Folder, MessagesSquare, type LucideIcon } from "lucide-react";
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
-import { scrollToPending, sectionKey, setCollapsed, slugify, useCollapsed } from "@/lib/minako/sections";
+import {
+  enforceFocus,
+  openSection,
+  registerSection,
+  scrollToPending,
+  sectionKey,
+  setCollapsed,
+  slugify,
+  useCollapsed,
+} from "@/lib/minako/sections";
 
 import { Switch } from "@/components/ui/switch";
 import {
@@ -45,9 +54,26 @@ export function SectionCard({
   const key = sectionKey(pathname, slug);
   const collapsed = useCollapsed(key);
   const bodyId = useId();
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [summary, setSummary] = useState("");
   useEffect(() => {
+    const off = registerSection(pathname, slug);
+    const t = setTimeout(() => enforceFocus(pathname), 0);
     scrollToPending(pathname);
-  }, [pathname]);
+    return () => {
+      off();
+      clearTimeout(t);
+    };
+  }, [pathname, slug]);
+  // Resumo do que está configurado, lido dos campos da seção.
+  useLayoutEffect(() => {
+    if (!collapsed || !bodyRef.current) return;
+    const parts = Array.from(bodyRef.current.querySelectorAll<HTMLElement>("[data-sum]"))
+      .map((el) => el.dataset.sum ?? "")
+      .filter(Boolean);
+    const next = parts.join(" · ");
+    if (next !== summary) setSummary(next);
+  });
   return (
     <section
       id={`secao-${slug}`}
@@ -60,7 +86,8 @@ export function SectionCard({
         aria-controls={bodyId}
         onClick={() => {
           playSound("tick");
-          setCollapsed(key, !collapsed);
+          if (collapsed) openSection(pathname, slug);
+          else setCollapsed(key, true);
         }}
         className={cn("flex w-full items-start gap-3 text-left", !collapsed && "mb-5")}
       >
@@ -72,7 +99,11 @@ export function SectionCard({
         <div className="min-w-0 flex-1">
           <h2 className="text-lg font-semibold leading-tight">{title}</h2>
           {description && !collapsed && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
-          {collapsed && <p className="mt-0.5 text-xs font-semibold text-muted-foreground">Recolhida · toque para abrir</p>}
+          {collapsed && (
+            <p className="mt-1 line-clamp-2 text-xs font-semibold text-muted-foreground">
+              {summary || "Toque para abrir"}
+            </p>
+          )}
         </div>
         <ChevronDown
           aria-hidden
@@ -80,11 +111,9 @@ export function SectionCard({
         />
         <span className="sr-only">{collapsed ? "Abrir seção" : "Recolher seção"}</span>
       </button>
-      {!collapsed && (
-        <div id={bodyId} className="space-y-5">
-          {children}
-        </div>
-      )}
+      <div id={bodyId} ref={bodyRef} hidden={collapsed} className="space-y-5">
+        {children}
+      </div>
     </section>
   );
 }
@@ -99,16 +128,20 @@ export function FieldShell({
   hint,
   error,
   htmlFor,
+  summary,
   children,
 }: {
   label: string;
   hint?: string | undefined;
   error?: string | undefined;
   htmlFor?: string | undefined;
+  /** Valor curto mostrado no resumo quando a seção está fechada. */
+  summary?: string | undefined;
   children: ReactNode;
 }) {
+  const clean = summary?.replace(/\s+/g, " ").trim();
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" data-sum={clean ? `${label}: ${clean.length > 40 ? clean.slice(0, 40) + "…" : clean}` : undefined}>
       <label htmlFor={htmlFor} className="block font-display text-sm font-semibold">
         {label}
       </label>
@@ -144,7 +177,7 @@ export function TextField({
 }) {
   const id = useId();
   return (
-    <FieldShell label={label} hint={hint} error={error} htmlFor={id}>
+    <FieldShell label={label} hint={hint} error={error} htmlFor={id} summary={String(value)}>
       <input
         id={id}
         className={cn(inputBase, error && "border-destructive")}
@@ -172,7 +205,7 @@ export function DateTimeField({
 }) {
   const id = useId();
   return (
-    <FieldShell label={label} hint={hint} error={error} htmlFor={id}>
+    <FieldShell label={label} hint={hint} error={error} htmlFor={id} summary={String(value)}>
       <input
         id={id}
         type="datetime-local"
@@ -203,7 +236,7 @@ export function TextAreaField({
 }) {
   const id = useId();
   return (
-    <FieldShell label={label} hint={hint} error={error} htmlFor={id}>
+    <FieldShell label={label} hint={hint} error={error} htmlFor={id} summary={String(value)}>
       <textarea
         id={id}
         rows={rows}
@@ -231,7 +264,7 @@ export function TimeField({
 }) {
   const id = useId();
   return (
-    <FieldShell label={label} hint={hint} error={error} htmlFor={id}>
+    <FieldShell label={label} hint={hint} error={error} htmlFor={id} summary={String(value)}>
       <input
         id={id}
         type="time"
@@ -271,7 +304,7 @@ export function NumberField({
     onChange(next);
   };
   return (
-    <FieldShell label={label} hint={hint} error={error} htmlFor={id}>
+    <FieldShell label={label} hint={hint} error={error} htmlFor={id} summary={Number.isFinite(value) ? `${value}${suffix ? " " + suffix : ""}` : ""}>
       <div
         className={cn(
           "flex items-center gap-1 rounded-2xl border-2 border-input bg-background p-1",
@@ -332,6 +365,7 @@ export function ToggleRow({
   const ref = useRef<HTMLButtonElement>(null);
   return (
     <div
+      data-sum={`${checked ? "✅" : "⛔"} ${label}`}
       className={cn(
         "flex items-center gap-3 rounded-2xl border-2 px-4 py-3 transition-colors duration-300",
         checked ? "border-primary/60 bg-secondary/70" : "border-border bg-background",
@@ -407,7 +441,7 @@ export function Segmented<T extends string | number>({
   );
   if (!label) return content;
   return (
-    <FieldShell label={label} hint={hint}>
+    <FieldShell label={label} hint={hint} summary={options.find((o) => o.value === value)?.label}>
       {content}
     </FieldShell>
   );
@@ -451,6 +485,8 @@ function Picker({
   searchPlaceholder: string;
 }) {
   const [open, setOpen] = useState(false);
+  const names = value.map((id) => items.find((i) => i.id === id)?.name ?? "?");
+  const summary = names.length === 0 ? "nenhum" : names.length > 2 ? `${names.slice(0, 2).join(", ")} +${names.length - 2}` : names.join(", ");
   const toggle = (id: string) => {
     if (multiple) {
       const has = value.includes(id);
@@ -463,7 +499,7 @@ function Picker({
     }
   };
   return (
-    <FieldShell label={label} hint={hint} error={error}>
+    <FieldShell label={label} hint={hint} error={error} summary={summary}>
       <div
         className={cn(
           "flex min-h-12 flex-wrap items-center gap-2 rounded-2xl border-2 border-dashed border-border-strong/70 bg-background/70 p-2",
