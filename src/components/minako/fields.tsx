@@ -69,7 +69,7 @@ export function SectionCard({
   useLayoutEffect(() => {
     if (!collapsed || !bodyRef.current) return;
     const parts = Array.from(bodyRef.current.querySelectorAll<HTMLElement>("[data-sum]"))
-      .map((el) => el.dataset.sum ?? "")
+      .map((el) => el.dataset["sum"] ?? "")
       .filter(Boolean);
     const next = parts.join(" · ");
     if (next !== summary) setSummary(next);
