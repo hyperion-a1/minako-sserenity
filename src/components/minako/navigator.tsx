@@ -61,7 +61,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
   return (
     <SearchCtx.Provider value={{ open: () => setOpen(true) }}>
       {children}
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={open} onOpenChange={setOpen} filter={searchFilter}>
         <CommandInput placeholder="O que você quer ajustar? (ex.: sorteio, noite, cargo)" className="text-base" />
         <CommandList className="max-h-[60vh]">
           <CommandEmpty>Não achei nada com esse nome 🥺 Tente outra palavra.</CommandEmpty>
@@ -115,6 +115,15 @@ export function SearchProvider({ children }: { children: ReactNode }) {
       </CommandDialog>
     </SearchCtx.Provider>
   );
+}
+
+const norm = (t: string) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+/** Todas as palavras digitadas precisam aparecer (sem ligar para acentos). */
+function searchFilter(value: string, search: string) {
+  const v = norm(value);
+  const words = norm(search).split(/\s+/).filter(Boolean);
+  if (!words.every((w) => v.includes(w))) return 0;
+  return words.some((w) => v.startsWith(w)) ? 1 : 0.5;
 }
 
 export function SearchButton({ className }: { className?: string }) {
