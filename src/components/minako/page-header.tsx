@@ -1,7 +1,7 @@
 import { ChevronsDownUp, ChevronsUpDown, Focus } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { focusOnly, revealSection, sectionKey, setAll, slugify, useCollapsed } from "@/lib/minako/sections";
+import { focusOnly, revealSection, sectionKey, setAll, setFocusMode, slugify, useCollapsed, useFocusMode } from "@/lib/minako/sections";
 import { cn } from "@/lib/utils";
 
 import type { NavItem } from "./modules";
@@ -91,12 +91,24 @@ function SectionTools({ item }: { item: NavItem }) {
 }
 
 function FocusButton({ item, slugs }: { item: NavItem; slugs: string[] }) {
+  const on = useFocusMode();
   return (
     <button
       type="button"
-      title="Deixa aberta só a seção que está na tela"
-      className="flex shrink-0 items-center gap-1.5 rounded-full border-2 border-primary-deep/50 bg-primary px-3 py-1.5 font-display text-sm font-semibold text-primary-foreground"
+      role="switch"
+      aria-checked={on}
+      title="Com o modo foco, abrir uma seção fecha as outras sozinhas"
+      className={cn(
+        "flex shrink-0 items-center gap-1.5 rounded-full border-2 px-3 py-1.5 font-display text-sm font-semibold transition-all active:scale-95",
+        on
+          ? "border-primary-deep/50 bg-primary text-primary-foreground shadow-[var(--shadow-squish-primary)]"
+          : "border-dashed border-border bg-transparent text-muted-foreground",
+      )}
       onClick={() => {
+        const next = !on;
+        setFocusMode(next);
+        playSound(next ? "on" : "off");
+        if (!next) return;
         // escolhe a seção mais próxima do topo da tela
         let best = slugs[0]!;
         let bestDist = Infinity;
@@ -109,12 +121,10 @@ function FocusButton({ item, slugs }: { item: NavItem; slugs: string[] }) {
             best = s;
           }
         }
-        playSound("pop");
         focusOnly(item.to, slugs, best);
-        revealSection(item.to, best);
       }}
     >
-      <Focus className="h-4 w-4" /> Modo foco
+      <Focus className="h-4 w-4" /> Modo foco: {on ? "ligado" : "desligado"}
     </button>
   );
 }

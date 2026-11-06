@@ -71,6 +71,77 @@ export function setAll(path: string, slugs: string[], value: boolean) {
   emit();
 }
 
+/* ---------- Modo foco (ligado por padrão) ---------- */
+
+const FOCUS_KEY = "minako:focus";
+let focusOn = true;
+let focusLoaded = false;
+const focusListeners = new Set<() => void>();
+function loadFocus() {
+  if (focusLoaded || typeof window === "undefined") return;
+  focusLoaded = true;
+  try {
+    focusOn = localStorage.getItem(FOCUS_KEY) !== "off";
+  } catch {
+    focusOn = true;
+  }
+}
+export function isFocusMode() {
+  loadFocus();
+  return focusOn;
+}
+export function useFocusMode() {
+  return useSyncExternalStore(
+    (l) => {
+      loadFocus();
+      focusListeners.add(l);
+      return () => focusListeners.delete(l);
+    },
+    () => focusOn,
+    () => true,
+  );
+}
+export function setFocusMode(value: boolean) {
+  loadFocus();
+  focusOn = value;
+  try {
+    localStorage.setItem(FOCUS_KEY, value ? "on" : "off");
+  } catch {
+    /* ok */
+  }
+  focusListeners.forEach((l) => l());
+}
+
+/** Seções presentes na tela, por página (na ordem em que aparecem). */
+const registered = new Map<string, string[]>();
+export function registerSection(path: string, slug: string) {
+  const list = registered.get(path) ?? [];
+  if (!list.includes(slug)) list.push(slug);
+  registered.set(path, list);
+  return () => {
+    const l = registered.get(path);
+    if (l) registered.set(path, l.filter((s) => s !== slug));
+  };
+}
+export const registeredSections = (path: string) => registered.get(path) ?? [];
+
+/** Com o modo foco ligado, deixa só uma seção aberta ao entrar na página. */
+export function enforceFocus(path: string) {
+  if (!isFocusMode()) return;
+  load();
+  const slugs = registeredSections(path);
+  const open = slugs.filter((s) => !collapsed[sectionKey(path, s)]);
+  if (open.length <= 1) return;
+  const keep = pending?.startsWith(`${path}#`) ? pending.split("#")[1]! : open[0]!;
+  focusOnly(path, slugs, keep);
+}
+
+/** Abre uma seção; no modo foco, as outras se fecham sozinhas. */
+export function openSection(path: string, slug: string) {
+  if (isFocusMode()) focusOnly(path, registeredSections(path), slug);
+  else setCollapsed(sectionKey(path, slug), false);
+}
+
 /** Modo foco: só a seção escolhida fica aberta. */
 export function focusOnly(path: string, slugs: string[], slug: string) {
   load();
@@ -86,7 +157,7 @@ export function focusOnly(path: string, slugs: string[], slug: string) {
 let pending: string | null = null;
 /** Abre a seção e rola até ela (agora ou quando a página montar). */
 export function revealSection(path: string, slug: string) {
-  setCollapsed(sectionKey(path, slug), false);
+  openSection(path, slug);
   pending = sectionKey(path, slug);
   setTimeout(() => scrollToPending(path), 60);
 }
