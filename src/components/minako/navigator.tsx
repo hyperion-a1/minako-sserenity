@@ -204,7 +204,7 @@ export function BottomTabs({ onMenu }: { onMenu: () => void }) {
   const current = NAV_ITEMS.find((n) => n.to === pathname);
   const onModule = !!current && current.id !== "overview";
 
-  const tab = "flex flex-1 flex-col items-center justify-center gap-0.5 rounded-2xl py-1.5 font-display text-[11px] font-semibold transition-colors";
+  const tab = "flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-[1.25rem] py-1.5 font-display text-[11px] font-semibold transition-all duration-300 active:scale-90 [&>svg]:transition-transform [&.bg-secondary>svg]:-translate-y-0.5 [&.bg-secondary>svg]:text-primary-deep [&.bg-secondary]:shadow-squish-sm";
   return (
     <>
       <nav
