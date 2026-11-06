@@ -3,9 +3,8 @@ import { publicOrigin } from "@/lib/minako/origin.server";
 
 const PROJECT_ID = "a1bec8e3-df32-4a3d-af41-606160d49e50";
 
-function req(host?: string) {
-  const headers = host ? { "x-forwarded-host": host } : undefined;
-  return new Request("http://localhost/auth/login", { headers });
+function req(host: string) {
+  return new Request("http://localhost/auth/login", { headers: { "x-forwarded-host": host } });
 }
 
 describe("publicOrigin", () => {
