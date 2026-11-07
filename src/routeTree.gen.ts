@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as CanaisRouteImport } from './routes/canais'
 import { Route as CargosRouteImport } from './routes/cargos'
 import { Route as MatchmakingRouteImport } from './routes/matchmaking'
@@ -22,12 +21,16 @@ import { Route as TermosRouteImport } from './routes/termos'
 import { Route as TiktokRouteImport } from './routes/tiktok'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as PainelIndexRouteImport } from './routes/painel.index'
+import { Route as PainelCanaisRouteImport } from './routes/painel.canais'
+import { Route as PainelCargosRouteImport } from './routes/painel.cargos'
+import { Route as PainelMatchmakingRouteImport } from './routes/painel.matchmaking'
+import { Route as PainelNoturnoRouteImport } from './routes/painel.noturno'
+import { Route as PainelPersonalidadeRouteImport } from './routes/painel.personalidade'
+import { Route as PainelSemanaRouteImport } from './routes/painel.semana'
+import { Route as PainelSorteiosRouteImport } from './routes/painel.sorteios'
+import { Route as PainelTiktokRouteImport } from './routes/painel.tiktok'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CanaisRoute = CanaisRouteImport.update({
   id: '/canais',
   path: '/canais',
@@ -88,9 +91,53 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PainelIndexRoute = PainelIndexRouteImport.update({
+  id: '/painel/',
+  path: '/painel/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelCanaisRoute = PainelCanaisRouteImport.update({
+  id: '/painel/canais',
+  path: '/painel/canais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelCargosRoute = PainelCargosRouteImport.update({
+  id: '/painel/cargos',
+  path: '/painel/cargos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelMatchmakingRoute = PainelMatchmakingRouteImport.update({
+  id: '/painel/matchmaking',
+  path: '/painel/matchmaking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelNoturnoRoute = PainelNoturnoRouteImport.update({
+  id: '/painel/noturno',
+  path: '/painel/noturno',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelPersonalidadeRoute = PainelPersonalidadeRouteImport.update({
+  id: '/painel/personalidade',
+  path: '/painel/personalidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelSemanaRoute = PainelSemanaRouteImport.update({
+  id: '/painel/semana',
+  path: '/painel/semana',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelSorteiosRoute = PainelSorteiosRouteImport.update({
+  id: '/painel/sorteios',
+  path: '/painel/sorteios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PainelTiktokRoute = PainelTiktokRouteImport.update({
+  id: '/painel/tiktok',
+  path: '/painel/tiktok',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '/canais': typeof CanaisRoute
   '/cargos': typeof CargosRoute
   '/matchmaking': typeof MatchmakingRoute
@@ -103,9 +150,17 @@ export interface FileRoutesByFullPath {
   '/tiktok': typeof TiktokRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
+  '/painel/canais': typeof PainelCanaisRoute
+  '/painel/cargos': typeof PainelCargosRoute
+  '/painel/matchmaking': typeof PainelMatchmakingRoute
+  '/painel/noturno': typeof PainelNoturnoRoute
+  '/painel/personalidade': typeof PainelPersonalidadeRoute
+  '/painel/semana': typeof PainelSemanaRoute
+  '/painel/sorteios': typeof PainelSorteiosRoute
+  '/painel/tiktok': typeof PainelTiktokRoute
+  '/painel/': typeof PainelIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/canais': typeof CanaisRoute
   '/cargos': typeof CargosRoute
   '/matchmaking': typeof MatchmakingRoute
@@ -118,10 +173,18 @@ export interface FileRoutesByTo {
   '/tiktok': typeof TiktokRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
+  '/painel/canais': typeof PainelCanaisRoute
+  '/painel/cargos': typeof PainelCargosRoute
+  '/painel/matchmaking': typeof PainelMatchmakingRoute
+  '/painel/noturno': typeof PainelNoturnoRoute
+  '/painel/personalidade': typeof PainelPersonalidadeRoute
+  '/painel/semana': typeof PainelSemanaRoute
+  '/painel/sorteios': typeof PainelSorteiosRoute
+  '/painel/tiktok': typeof PainelTiktokRoute
+  '/painel': typeof PainelIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/canais': typeof CanaisRoute
   '/cargos': typeof CargosRoute
   '/matchmaking': typeof MatchmakingRoute
@@ -134,11 +197,19 @@ export interface FileRoutesById {
   '/tiktok': typeof TiktokRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/login': typeof AuthLoginRoute
+  '/painel/canais': typeof PainelCanaisRoute
+  '/painel/cargos': typeof PainelCargosRoute
+  '/painel/matchmaking': typeof PainelMatchmakingRoute
+  '/painel/noturno': typeof PainelNoturnoRoute
+  '/painel/personalidade': typeof PainelPersonalidadeRoute
+  '/painel/semana': typeof PainelSemanaRoute
+  '/painel/sorteios': typeof PainelSorteiosRoute
+  '/painel/tiktok': typeof PainelTiktokRoute
+  '/painel/': typeof PainelIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/canais'
     | '/cargos'
     | '/matchmaking'
@@ -151,9 +222,17 @@ export interface FileRouteTypes {
     | '/tiktok'
     | '/auth/callback'
     | '/auth/login'
+    | '/painel/canais'
+    | '/painel/cargos'
+    | '/painel/matchmaking'
+    | '/painel/noturno'
+    | '/painel/personalidade'
+    | '/painel/semana'
+    | '/painel/sorteios'
+    | '/painel/tiktok'
+    | '/painel/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/canais'
     | '/cargos'
     | '/matchmaking'
@@ -166,9 +245,17 @@ export interface FileRouteTypes {
     | '/tiktok'
     | '/auth/callback'
     | '/auth/login'
+    | '/painel/canais'
+    | '/painel/cargos'
+    | '/painel/matchmaking'
+    | '/painel/noturno'
+    | '/painel/personalidade'
+    | '/painel/semana'
+    | '/painel/sorteios'
+    | '/painel/tiktok'
+    | '/painel'
   id:
     | '__root__'
-    | '/'
     | '/canais'
     | '/cargos'
     | '/matchmaking'
@@ -181,10 +268,18 @@ export interface FileRouteTypes {
     | '/tiktok'
     | '/auth/callback'
     | '/auth/login'
+    | '/painel/canais'
+    | '/painel/cargos'
+    | '/painel/matchmaking'
+    | '/painel/noturno'
+    | '/painel/personalidade'
+    | '/painel/semana'
+    | '/painel/sorteios'
+    | '/painel/tiktok'
+    | '/painel/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   CanaisRoute: typeof CanaisRoute
   CargosRoute: typeof CargosRoute
   MatchmakingRoute: typeof MatchmakingRoute
@@ -197,17 +292,19 @@ export interface RootRouteChildren {
   TiktokRoute: typeof TiktokRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  PainelCanaisRoute: typeof PainelCanaisRoute
+  PainelCargosRoute: typeof PainelCargosRoute
+  PainelMatchmakingRoute: typeof PainelMatchmakingRoute
+  PainelNoturnoRoute: typeof PainelNoturnoRoute
+  PainelPersonalidadeRoute: typeof PainelPersonalidadeRoute
+  PainelSemanaRoute: typeof PainelSemanaRoute
+  PainelSorteiosRoute: typeof PainelSorteiosRoute
+  PainelTiktokRoute: typeof PainelTiktokRoute
+  PainelIndexRoute: typeof PainelIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/canais': {
       id: '/canais'
       path: '/canais'
@@ -292,11 +389,73 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/painel/': {
+      id: '/painel/'
+      path: '/painel'
+      fullPath: '/painel/'
+      preLoaderRoute: typeof PainelIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/canais': {
+      id: '/painel/canais'
+      path: '/painel/canais'
+      fullPath: '/painel/canais'
+      preLoaderRoute: typeof PainelCanaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/cargos': {
+      id: '/painel/cargos'
+      path: '/painel/cargos'
+      fullPath: '/painel/cargos'
+      preLoaderRoute: typeof PainelCargosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/matchmaking': {
+      id: '/painel/matchmaking'
+      path: '/painel/matchmaking'
+      fullPath: '/painel/matchmaking'
+      preLoaderRoute: typeof PainelMatchmakingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/noturno': {
+      id: '/painel/noturno'
+      path: '/painel/noturno'
+      fullPath: '/painel/noturno'
+      preLoaderRoute: typeof PainelNoturnoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/personalidade': {
+      id: '/painel/personalidade'
+      path: '/painel/personalidade'
+      fullPath: '/painel/personalidade'
+      preLoaderRoute: typeof PainelPersonalidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/semana': {
+      id: '/painel/semana'
+      path: '/painel/semana'
+      fullPath: '/painel/semana'
+      preLoaderRoute: typeof PainelSemanaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/sorteios': {
+      id: '/painel/sorteios'
+      path: '/painel/sorteios'
+      fullPath: '/painel/sorteios'
+      preLoaderRoute: typeof PainelSorteiosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/painel/tiktok': {
+      id: '/painel/tiktok'
+      path: '/painel/tiktok'
+      fullPath: '/painel/tiktok'
+      preLoaderRoute: typeof PainelTiktokRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   CanaisRoute: CanaisRoute,
   CargosRoute: CargosRoute,
   MatchmakingRoute: MatchmakingRoute,
@@ -309,6 +468,15 @@ const rootRouteChildren: RootRouteChildren = {
   TiktokRoute: TiktokRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   AuthLoginRoute: AuthLoginRoute,
+  PainelCanaisRoute: PainelCanaisRoute,
+  PainelCargosRoute: PainelCargosRoute,
+  PainelMatchmakingRoute: PainelMatchmakingRoute,
+  PainelNoturnoRoute: PainelNoturnoRoute,
+  PainelPersonalidadeRoute: PainelPersonalidadeRoute,
+  PainelSemanaRoute: PainelSemanaRoute,
+  PainelSorteiosRoute: PainelSorteiosRoute,
+  PainelTiktokRoute: PainelTiktokRoute,
+  PainelIndexRoute: PainelIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -176,7 +176,9 @@ export function scrollToPending(path: string) {
 export function getRecent(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
+    const list: string[] = JSON.parse(localStorage.getItem(RECENT_KEY) || "[]");
+    // Endereços antigos (antes de /painel) viram os novos.
+    return list.map((p) => (p === "/" ? "/painel" : p.startsWith("/painel") ? p : `/painel${p}`));
   } catch {
     return [];
   }
