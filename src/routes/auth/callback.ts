@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 const back = (reason?: string) =>
-  new Response(null, { status: 302, headers: { Location: reason ? `/?login=${reason}` : "/", "Cache-Control": "no-store" } });
+  new Response(null, { status: 302, headers: { Location: reason ? `/painel?login=${reason}` : "/painel", "Cache-Control": "no-store" } });
 
 export const Route = createFileRoute("/auth/callback")({
   server: {

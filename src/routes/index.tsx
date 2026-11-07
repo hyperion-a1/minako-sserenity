@@ -1,312 +1,122 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, ScrollText, ShieldCheck } from "lucide-react";
-import { useRef, useState } from "react";
+import { ArrowRight, LogIn, Sparkles } from "lucide-react";
 
 import mascot from "@/assets/minako-mascot.webp";
-import { burstFrom } from "@/components/minako/effects";
-import { MINAKO_PHRASES, NAV_ITEMS, type NavItem } from "@/components/minako/modules";
+import sleeping from "@/assets/minako-sleeping.webp";
+import { CATEGORIES, NAV_ITEMS, SUPPORT_URL } from "@/components/minako/modules";
 import { playSound } from "@/components/minako/use-sound";
-import { Switch } from "@/components/ui/switch";
-import { WEEK_DAYS } from "@/lib/minako/config";
 import { useDashboard } from "@/lib/minako/store";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Minako Aino — Painel de configurações" },
-      {
-        name: "description",
-        content: "Ligue, desligue e ajuste os recursos da Minako Aino no seu servidor: Modo Noturno, sorteios, matchmaking, TikTok e muito mais.",
-      },
-      { property: "og:title", content: "Minako Aino — Painel de configurações" },
-      {
-        property: "og:description",
-        content: "Um painel fofo e aconchegante para cuidar da Minako no seu servidor Discord.",
-      },
+      { title: "Minako Aino — a bot mágica do seu servidor Discord" },
+      { name: "description", content: "Conheça a Minako Aino: Modo Noturno, sorteios, matchmaking, avisos do TikTok e personalidade sazonal para o seu servidor Discord." },
+      { property: "og:title", content: "Minako Aino — a bot mágica do seu servidor" },
+      { property: "og:description", content: "Uma bot fofa e aconchegante, com painel feito para o celular." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Overview,
+  component: Landing,
 });
 
-const item = (id: NavItem["id"]) => NAV_ITEMS.find((n) => n.id === id)!;
+const features = NAV_ITEMS.filter((n) => n.id !== "overview");
 
-function Overview() {
-  const { draft, update, guild } = useDashboard();
-  const [phrase, setPhrase] = useState(0);
-  const [wiggle, setWiggle] = useState(false);
-  const mascotRef = useRef<HTMLButtonElement>(null);
-
-  const seasonalOn = Object.values(draft.seasonal).some(Boolean);
-  const features: {
-    nav: NavItem;
-    emoji: string;
-    on: boolean;
-    status: string;
-    toggle: (v: boolean) => void;
-  }[] = [
-    {
-      nav: item("noturno"),
-      emoji: "🌙",
-      on: draft.night.enabled,
-      status: draft.night.enabled ? `${draft.night.start} → ${draft.night.end}` : "Canais sempre abertos",
-      toggle: (v) => update("night", { enabled: v }),
-    },
-    {
-      nav: item("matchmaking"),
-      emoji: "🎮",
-      on: draft.matchmaking.enabled,
-      status: `${draft.matchmaking.modes.length} modo(s) · grupos de ${draft.matchmaking.groupCapacity}`,
-      toggle: (v) => update("matchmaking", { enabled: v }),
-    },
-    {
-      nav: item("sorteios"),
-      emoji: "🎁",
-      on: draft.giveaways.enabled,
-      status: `${draft.giveaways.winners} ganhador(es) · ${draft.giveaways.name || "sem nome"}`,
-      toggle: (v) => update("giveaways", { enabled: v }),
-    },
-    {
-      nav: item("tiktok"),
-      emoji: "🎬",
-      on: draft.tiktok.enabled,
-      status: draft.tiktok.enabled ? `Verifica a cada ${draft.tiktok.pollMinutes} min` : "Sem avisos de vídeos",
-      toggle: (v) => update("tiktok", { enabled: v }),
-    },
-    {
-      nav: item("personalidade"),
-      emoji: "✨",
-      on: seasonalOn,
-      status: `${Object.values(draft.seasonal).filter(Boolean).length} de 3 pacotes ativos`,
-      toggle: (v) => update("seasonal", { halloween: v, natal: v, ano_novo: v }),
-    },
-  ];
-  const activeCount = features.filter((f) => f.on).length;
-
-  const tools: { nav: NavItem; status: string }[] = [
-    { nav: item("semana"), status: `${WEEK_DAYS[draft.week.startDay]}, às ${draft.week.startTime}` },
-    {
-      nav: item("canais"),
-      status:
-        [draft.channels.moderation, draft.channels.publication].filter(Boolean).length + " de 2 canais definidos",
-    },
-    {
-      nav: item("cargos"),
-      status: draft.roles.star ? "Estrela da Semana definida" : "Estrela da Semana sem cargo",
-    },
-  ];
-
-  const pokeMinako = () => {
-    playSound("giggle");
-    burstFrom(mascotRef.current, 14);
-    setPhrase((p) => (p + 1) % MINAKO_PHRASES.length);
-    setWiggle(true);
-    setTimeout(() => setWiggle(false), 650);
-  };
-
+function Landing() {
+  const { user, loginAvailable } = useDashboard();
   return (
-    <div className="space-y-8">
-      {/* Boas-vindas */}
-      <section className="relative overflow-hidden rounded-[2rem] border-2 border-primary-deep bg-sunrise p-6 shadow-[var(--shadow-squish-primary)] sm:p-8">
-        <div className="dotted-paper absolute inset-0 opacity-40" aria-hidden />
-        <div className="relative grid items-center gap-4 sm:grid-cols-[1fr_auto]">
-          <div className="order-2 sm:order-1">
-            <p className="font-display text-xs font-semibold uppercase tracking-[0.2em] text-primary-foreground/70">
-              {guild.emoji} {guild.name}
+    <div className="min-h-screen overflow-x-clip">
+      <header className="sticky top-0 z-30 border-b-2 border-border bg-background/85 px-4 py-2.5 backdrop-blur">
+        <div className="mx-auto flex max-w-5xl items-center gap-3">
+          <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-2xl border-2 border-primary-deep bg-magic">
+            <img src={mascot} alt="" width={44} height={44} className="h-12 w-12 translate-y-1.5 object-cover object-top" />
+          </span>
+          <span className="font-display text-lg font-bold">Minako Aino</span>
+          <Link to="/painel" onClick={() => playSound("nav")} className="ml-auto inline-flex min-h-11 items-center gap-1.5 rounded-2xl bg-primary px-4 font-display text-sm font-semibold text-primary-foreground shadow-squish-sm active:translate-y-0.5">
+            Painel <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-5xl px-4 pb-24">
+        {/* Apresentação */}
+        <section className="relative grid items-center gap-6 pt-8 sm:grid-cols-[1.2fr_1fr] sm:pt-14">
+          <div className="animate-rise space-y-4 text-center sm:text-left">
+            <p className="inline-flex items-center gap-1.5 rounded-full bg-lilac px-3 py-1 text-xs font-bold text-lilac-foreground">
+              <Sparkles className="h-3.5 w-3.5" /> Em nome do amor e da comunidade!
             </p>
-            <h1 className="mt-1 text-4xl font-bold leading-[1.05] text-primary-foreground sm:text-5xl">
-              Oiê! Vamos deixar o servidor quentinho?
+            <h1 className="font-display text-4xl font-bold leading-tight sm:text-5xl">
+              A bot mágica que cuida do seu servidor 💫
             </h1>
-            <div
-              key={phrase}
-              className="relative mt-5 max-w-md animate-pop-in rounded-3xl border-2 border-primary-deep/40 bg-card px-5 py-4 text-sm font-semibold text-card-foreground shadow-squish-sm"
-            >
-              <span
-                aria-hidden
-                className="absolute -top-2 right-10 hidden h-4 w-4 rotate-45 border-l-2 border-t-2 border-primary-deep/40 bg-card sm:-right-2 sm:top-6 sm:block sm:rotate-[135deg]"
-              />
-              {MINAKO_PHRASES[phrase]}
+            <p className="text-base text-muted-foreground">
+              A Minako fecha canais à noite, organiza sorteios e partidas, avisa vídeos do TikTok e muda de humor nas festas. Tudo ajustável pelo celular.
+            </p>
+            <div className="flex flex-col gap-2 sm:flex-row">
+              {user ? (
+                <Link to="/painel" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-5 font-display font-semibold text-primary-foreground shadow-squish-primary active:translate-y-1">
+                  Abrir meu painel <ArrowRight className="h-4 w-4" />
+                </Link>
+              ) : (
+                <>
+                  {loginAvailable && (
+                    <a href="/auth/login" target="_top" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-primary px-5 font-display font-semibold text-primary-foreground shadow-squish-primary active:translate-y-1">
+                      <LogIn className="h-4 w-4" /> Entrar com Discord
+                    </a>
+                  )}
+                  <Link to="/painel" className="inline-flex min-h-12 items-center justify-center rounded-2xl border-2 border-border bg-card px-5 font-display font-semibold shadow-squish-sm active:translate-y-0.5">
+                    Ver demonstração
+                  </Link>
+                </>
+              )}
             </div>
           </div>
-          <button
-            ref={mascotRef}
-            type="button"
-            onClick={pokeMinako}
-            aria-label="Cutucar a Minako"
-            className="order-1 mx-auto w-40 sm:order-2 sm:w-56"
-          >
-            <img
-              src={mascot}
-              alt="Minako Aino acenando com um coração"
-              width={640}
-              height={640}
-              className={cn(
-                "w-full drop-shadow-[0_12px_18px_oklch(0.5_0.12_50/0.35)]",
-                wiggle ? "animate-wiggle" : "animate-bob",
-              )}
-            />
-          </button>
-        </div>
-      </section>
-
-      {/* Resumo rápido */}
-      <section className="grid grid-cols-3 gap-3">
-        {[
-          { label: "Recursos ligados", value: `${activeCount}/${features.length}`, emoji: "💡" },
-          { label: "Virada da semana", value: (WEEK_DAYS[draft.week.startDay] ?? "").split("-")[0] ?? "", emoji: "📅" },
-          { label: "Membros", value: guild.members.toLocaleString("pt-BR"), emoji: "🫶" },
-        ].map((s, i) => (
-          <div
-            key={s.label}
-            className="squish-card animate-rise px-3 py-4 text-center sm:px-5"
-            style={{ animationDelay: `${80 + i * 70}ms` }}
-          >
-            <div className="text-2xl">{s.emoji}</div>
-            <div className="mt-1 font-display text-xl font-bold sm:text-2xl">{s.value}</div>
-            <div className="text-xs font-semibold text-muted-foreground">{s.label}</div>
+          <div className="relative mx-auto w-56 sm:w-72">
+            <span aria-hidden className="absolute inset-4 rounded-full bg-magic blur-2xl" />
+            <span aria-hidden className="absolute left-2 top-4 animate-twinkle text-2xl">✨</span>
+            <span aria-hidden className="absolute right-4 top-0 animate-twinkle text-xl [animation-delay:1s]">⭐</span>
+            <span aria-hidden className="absolute bottom-6 right-0 animate-twinkle text-xl [animation-delay:2s]">💖</span>
+            <img src={mascot} alt="Minako Aino acenando" width={288} height={288} className="relative animate-float drop-shadow-xl" />
           </div>
-        ))}
-      </section>
+        </section>
 
-      {/* Recursos */}
-      <section>
-        <div className="mb-4 flex items-end justify-between gap-2">
-          <div>
-            <h2 className="text-2xl font-bold">Recursos</h2>
-            <p className="text-sm text-muted-foreground">Ligue e desligue com um toque. Depois é só salvar!</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3">
-          {features.map((f, i) => {
-            const Icon = f.nav.icon;
-            return (
-              <article
-                key={f.nav.id}
-                className={cn(
-                  "squish-card group flex min-w-0 animate-rise items-center gap-3 rounded-[1.4rem] py-2.5 pl-2.5 pr-3 transition-colors duration-300",
-                  f.on ? "border-primary/60" : "opacity-95",
-                )}
-                style={{ animationDelay: `${150 + i * 60}ms` }}
-              >
-                <Link
-                  to={f.nav.to}
-                  onClick={() => playSound("nav")}
-                  aria-label={`Configurar ${f.nav.label}`}
-                  className="flex min-w-0 flex-1 items-center gap-3"
-                >
-                  <span className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-2xl transition-transform group-hover:-rotate-6 group-active:scale-90", f.nav.tone)}>
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="flex items-center gap-1 font-display text-[15px] font-semibold leading-tight">
-                      <span className="truncate">{f.nav.label}</span>
-                      <ArrowRight className="h-3.5 w-3.5 shrink-0 text-primary-deep opacity-60 transition-transform group-hover:translate-x-0.5" />
+        {/* Recursos reais */}
+        <section className="mt-14 space-y-6">
+          <h2 className="text-center font-display text-2xl font-bold">O que a Minako faz</h2>
+          {CATEGORIES.filter((c) => c.id !== "inicio").map((c) => (
+            <div key={c.id}>
+              <p className="mb-2 font-display text-sm font-semibold text-muted-foreground">{c.emoji} {c.label}</p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {features.filter((f) => f.category === c.id).map((f) => (
+                  <Link key={f.id} to={f.to} onClick={() => playSound("nav")} className="flex min-h-14 items-center gap-3 rounded-2xl border-2 border-border bg-card px-3 py-2 shadow-squish-sm transition-transform active:translate-y-0.5">
+                    <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${f.tone}`}><f.icon className="h-5 w-5" /></span>
+                    <span className="min-w-0">
+                      <span className="block font-display font-semibold">{f.label}</span>
+                      <span className="block truncate text-sm text-muted-foreground">{f.description}</span>
                     </span>
-                    <span className="block truncate text-xs text-muted-foreground">{f.status}</span>
-                  </span>
-                </Link>
-                <ToggleWithFx checked={f.on} onChange={f.toggle} label={f.nav.label} />
-              </article>
-            );
-          })}
-        </div>
-      </section>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
 
-      {/* Ferramentas */}
-      <section>
-        <h2 className="text-2xl font-bold">Ferramentas</h2>
-        <p className="mb-4 text-sm text-muted-foreground">O básico que deixa tudo funcionando direitinho.</p>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {tools.map((t, i) => {
-            const Icon = t.nav.icon;
-            return (
-              <Link
-                key={t.nav.id}
-                to={t.nav.to}
-                onClick={() => playSound("nav")}
-                className="squish-card squish-press flex animate-rise items-center gap-3 p-4"
-                style={{ animationDelay: `${300 + i * 60}ms` }}
-              >
-                <span className={cn("grid h-10 w-10 shrink-0 place-items-center rounded-xl", t.nav.tone)}>
-                  <Icon className="h-5 w-5" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-display font-semibold">{t.nav.label}</span>
-                  <span className="block truncate text-xs text-muted-foreground">{t.status}</span>
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
+        {/* Como funciona */}
+        <section className="mt-14 grid items-center gap-6 rounded-3xl bg-night-sky p-6 text-night-foreground sm:grid-cols-[auto_1fr]">
+          <img src={sleeping} alt="Minako dormindo" width={140} height={140} className="mx-auto w-32 animate-bob" />
+          <ol className="space-y-3">
+            <li><b className="font-display">1.</b> Entre com a sua conta do Discord.</li>
+            <li><b className="font-display">2.</b> Escolha o servidor em que a Minako já está.</li>
+            <li><b className="font-display">3.</b> Ajuste os recursos e toque em salvar. A Minako aplica na hora.</li>
+          </ol>
+        </section>
+      </main>
 
-      {/* Documentos */}
-      <section className="rounded-[2rem] border-2 border-dashed border-border-strong/70 bg-card/60 p-5 sm:p-6">
-        <h2 className="text-2xl font-bold">Combinados importantes 📜</h2>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Antes de usar a Minako, vale dar uma lidinha nos documentos oficiais.
-        </p>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Link
-            to="/termos"
-            onClick={() => playSound("pop")}
-            className="squish-card squish-press flex items-center gap-3 p-4"
-          >
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-secondary text-secondary-foreground">
-              <ScrollText className="h-5 w-5" />
-            </span>
-            <span>
-              <span className="block font-display font-semibold">Termos de Uso</span>
-              <span className="block text-xs text-muted-foreground">Regras para usar a Minako</span>
-            </span>
-            <ArrowRight className="ml-auto h-4 w-4 text-muted-foreground" />
-          </Link>
-          <Link
-            to="/privacidade"
-            onClick={() => playSound("pop")}
-            className="squish-card squish-press flex items-center gap-3 p-4"
-          >
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-mint text-mint-foreground">
-              <ShieldCheck className="h-5 w-5" />
-            </span>
-            <span>
-              <span className="block font-display font-semibold">Política de Privacidade</span>
-              <span className="block text-xs text-muted-foreground">Como seus dados são cuidados</span>
-            </span>
-            <ArrowRight className="ml-auto h-4 w-4 text-muted-foreground" />
-          </Link>
-        </div>
-      </section>
-
-      <p className="text-center text-xs text-muted-foreground">
-        Modo demonstração: as alterações ficam salvas apenas neste navegador.
-      </p>
+      <footer className="mx-auto flex max-w-5xl flex-wrap justify-center gap-x-5 gap-y-2 px-4 pb-10 text-sm font-semibold text-muted-foreground">
+        <Link to="/termos" className="hover:text-foreground">Termos de Uso</Link>
+        <Link to="/privacidade" className="hover:text-foreground">Política de Privacidade</Link>
+        <a href={SUPPORT_URL} target="_blank" rel="noreferrer" className="hover:text-foreground">Suporte</a>
+      </footer>
     </div>
-  );
-}
-
-function ToggleWithFx({
-  checked,
-  onChange,
-  label,
-}: {
-  checked: boolean;
-  onChange: (v: boolean) => void;
-  label: string;
-}) {
-  const ref = useRef<HTMLButtonElement>(null);
-  return (
-    <Switch
-      ref={ref}
-      checked={checked}
-      aria-label={`Ligar ou desligar ${label}`}
-      onCheckedChange={(v) => {
-        playSound(v ? "on" : "off");
-        if (v) burstFrom(ref.current, 10);
-        onChange(v);
-      }}
-    />
   );
 }
