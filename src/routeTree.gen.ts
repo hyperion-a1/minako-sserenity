@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as CanaisRouteImport } from './routes/canais'
 import { Route as CargosRouteImport } from './routes/cargos'
 import { Route as MatchmakingRouteImport } from './routes/matchmaking'
@@ -31,6 +32,11 @@ import { Route as PainelSemanaRouteImport } from './routes/painel.semana'
 import { Route as PainelSorteiosRouteImport } from './routes/painel.sorteios'
 import { Route as PainelTiktokRouteImport } from './routes/painel.tiktok'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CanaisRoute = CanaisRouteImport.update({
   id: '/canais',
   path: '/canais',
@@ -138,6 +144,7 @@ const PainelTiktokRoute = PainelTiktokRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
   '/canais': typeof CanaisRoute
   '/cargos': typeof CargosRoute
   '/matchmaking': typeof MatchmakingRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/painel/': typeof PainelIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof IndexRoute
   '/canais': typeof CanaisRoute
   '/cargos': typeof CargosRoute
   '/matchmaking': typeof MatchmakingRoute
@@ -185,6 +193,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/canais': typeof CanaisRoute
   '/cargos': typeof CargosRoute
   '/matchmaking': typeof MatchmakingRoute
@@ -210,6 +219,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/canais'
     | '/cargos'
     | '/matchmaking'
@@ -233,6 +243,7 @@ export interface FileRouteTypes {
     | '/painel/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/canais'
     | '/cargos'
     | '/matchmaking'
@@ -256,6 +267,7 @@ export interface FileRouteTypes {
     | '/painel'
   id:
     | '__root__'
+    | '/'
     | '/canais'
     | '/cargos'
     | '/matchmaking'
@@ -280,6 +292,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   CanaisRoute: typeof CanaisRoute
   CargosRoute: typeof CargosRoute
   MatchmakingRoute: typeof MatchmakingRoute
@@ -305,6 +318,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/canais': {
       id: '/canais'
       path: '/canais'
@@ -456,6 +476,7 @@ declare module '@tanstack/react-router' {
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   CanaisRoute: CanaisRoute,
   CargosRoute: CargosRoute,
   MatchmakingRoute: MatchmakingRoute,
