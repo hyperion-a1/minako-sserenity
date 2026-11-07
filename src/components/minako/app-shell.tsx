@@ -25,7 +25,7 @@ import { playSound } from "./use-sound";
 
 function Brand({ compact }: { compact?: boolean }) {
   return (
-    <Link to="/" className="group flex items-center gap-3" onClick={() => playSound("giggle")}>
+    <Link to="/painel" className="group flex items-center gap-3" onClick={() => playSound("giggle")}>
       <span className="relative grid h-12 w-12 place-items-center overflow-hidden rounded-2xl border-2 border-primary-deep bg-sunrise shadow-[var(--shadow-squish-primary)] transition-transform group-hover:-rotate-6">
         <img src={mascot} alt="" width={48} height={48} className="h-14 w-14 translate-y-2 object-cover object-top" />
       </span>

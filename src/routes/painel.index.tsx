@@ -11,7 +11,7 @@ import { WEEK_DAYS } from "@/lib/minako/config";
 import { useDashboard } from "@/lib/minako/store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/painel/")({
   head: () => ({
     meta: [
       { title: "Minako Aino — Painel de configurações" },

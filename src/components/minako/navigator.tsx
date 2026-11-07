@@ -212,7 +212,7 @@ export function BottomTabs({ onMenu }: { onMenu: () => void }) {
         className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-border bg-background/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1.5 backdrop-blur lg:hidden"
       >
         <div className="mx-auto flex max-w-md gap-1">
-          <Link to="/" onClick={() => playSound("nav")} className={cn(tab, pathname === "/" ? "bg-secondary text-foreground" : "text-muted-foreground")}>
+          <Link to="/painel" onClick={() => playSound("nav")} className={cn(tab, pathname === "/painel" ? "bg-secondary text-foreground" : "text-muted-foreground")}>
             <House className="h-5 w-5" /> Início
           </Link>
           <button type="button" onClick={() => { playSound("pop"); setGridOpen(true); }} className={cn(tab, onModule ? "bg-secondary text-foreground" : "text-muted-foreground")}>
