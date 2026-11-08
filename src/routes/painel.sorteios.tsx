@@ -98,7 +98,7 @@ function GiveawaysPage() {
     setStep(i);
     const first = STEPS[i]!.sections[0];
     if (first) openSection(PATH, slugify(first));
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.getElementById("passos-sorteio")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   const stepErr = [err.name || err.winners || err.min || err.max, "", err.cd, err.blocks || err.color, ""];
   if (!nav) return null;
@@ -116,7 +116,7 @@ function GiveawaysPage() {
       />
 
       <div className={cn("space-y-5", !g.enabled && "pointer-events-none opacity-50")}>
-        <nav aria-label="Passos do sorteio" className="sticky top-[4.4rem] z-20 -mx-1 rounded-3xl border-2 border-border bg-background/90 p-1.5 backdrop-blur lg:top-3">
+        <nav id="passos-sorteio" aria-label="Passos do sorteio" className="scroll-mt-20 sticky top-[4.4rem] z-20 -mx-1 rounded-3xl border-2 border-border bg-background/90 p-1.5 backdrop-blur lg:top-3">
           <ol className="grid grid-cols-5 gap-1">
             {STEPS.map((st, i) => (
               <li key={st.label}>

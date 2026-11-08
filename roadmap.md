@@ -8,5 +8,7 @@
 - [x] Painel em /painel com redirecionamento das rotas antigas.
 - [x] Landing pública em / com a Minako.
 - [x] Paleta Magical Girl (rosa, lilás, dourado).
-- [ ] Mascote reagindo a estados, sorteios em passos, ajustes finos Android.
+- [x] Mascote reagindo a estados.
+- [x] Sorteios em passos.
+- [ ] Ajustes finos Android.
 - [ ] Link de convite do bot (depende do proprietário).
