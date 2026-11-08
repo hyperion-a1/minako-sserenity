@@ -19,6 +19,7 @@ import { AudioControl } from "./audio-control";
 import { BurstLayer, FloatingSky } from "./effects";
 import { NAV_ITEMS, SUPPORT_URL } from "./modules";
 import { BottomTabs, GroupedNav, SearchButton, SearchProvider } from "./navigator";
+import { MascotReaction } from "./mascot-reaction";
 import { SaveBar } from "./save-bar";
 import { ScrollProgress } from "./scroll-progress";
 import { playSound } from "./use-sound";
@@ -261,6 +262,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="fixed bottom-[5.25rem] right-3 z-50 lg:bottom-5 lg:right-5">
         <AudioControl />
       </div>
+      <MascotReaction />
       <SaveBar />
       <BottomTabs onMenu={() => setMenuOpen(true)} />
     </div>

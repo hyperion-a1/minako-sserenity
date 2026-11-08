@@ -12,7 +12,7 @@ type Mood = "happy" | "worried" | "busy" | "sleepy" | "curious";
 
 /** Minako pequenininha no canto do painel, reagindo ao que acontece. */
 export function MascotReaction() {
-  const { loading, loadError, guildWarning, mode, dirty, lastSavedAt, guild } = useDashboard();
+  const { loading, loadError, guildWarning, mode, dirty, lastSavedAt } = useDashboard();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [bubble, setBubble] = useState<{ text: string; mood: Mood } | null>(null);
   const [hop, setHop] = useState(0);
@@ -46,9 +46,6 @@ export function MascotReaction() {
     if (dirty) say("Ooh, mudanças novas! Não esquece de salvar 💖", "curious", 3500);
   }, [dirty]);
   useEffect(() => {
-    if (!loading && guild.id && mode === "live" && guild.channels.length === 0 && !guildWarning) return;
-  }, [loading, guild, mode, guildWarning]);
-  useEffect(() => {
     if (pathname === "/painel/noturno") say("Hora de descansar os canais… zzz 💤", "sleepy");
   }, [pathname]);
   useEffect(() => {
@@ -62,7 +59,7 @@ export function MascotReaction() {
   const img = mood === "sleepy" ? sleeping : mascot;
 
   return (
-    <div className="pointer-events-none fixed bottom-[5.25rem] left-3 z-40 flex items-end gap-2 lg:bottom-5 lg:left-[316px]">
+    <div className={cn("pointer-events-none fixed left-3 z-40 flex items-end gap-2 transition-[bottom] duration-300 lg:left-[316px]", dirty ? "bottom-[10.5rem] lg:bottom-24" : "bottom-[5.25rem] lg:bottom-5")}>
       <button
         type="button"
         aria-label="Falar com a Minako"
