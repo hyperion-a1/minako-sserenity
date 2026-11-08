@@ -388,3 +388,6 @@ html.typing [data-hide-typing] {
     scroll-behavior: auto !important;
   }
 }
+html.typing [data-typing-bottom] {
+  bottom: 0.75rem;
+}

@@ -46,7 +46,7 @@ export function SaveBar() {
   };
 
   return (
-    <div className="fixed inset-x-3 bottom-[5.25rem] z-40 sm:inset-x-auto lg:bottom-3 sm:left-1/2 sm:w-[min(36rem,calc(100%-2rem))] sm:-translate-x-1/2 lg:left-[calc(50%+150px)]">
+    <div data-typing-bottom className="fixed inset-x-3 bottom-[5.25rem] z-40 sm:inset-x-auto lg:bottom-3 sm:left-1/2 sm:w-[min(36rem,calc(100%-2rem))] sm:-translate-x-1/2 lg:left-[calc(50%+150px)]">
       <div className="mr-[4.25rem] flex animate-pop-in items-center gap-2 rounded-full border-2 border-primary-deep bg-card p-2 pl-4 shadow-glow sm:mr-0">
         <span className="hidden animate-heartbeat text-xl sm:inline">💌</span>
         <div className="min-w-0 flex-1">
