@@ -156,7 +156,16 @@ export function focusOnly(path: string, slugs: string[], slug: string) {
 
 let pending: string | null = null;
 /** Abre a seção e rola até ela (agora ou quando a página montar). */
+const revealListeners = new Set<(path: string, slug: string) => void>();
+/** Avisa quando uma seção é pedida (usado pelos passos dos Sorteios). */
+export function onReveal(l: (path: string, slug: string) => void) {
+  revealListeners.add(l);
+  return () => {
+    revealListeners.delete(l);
+  };
+}
 export function revealSection(path: string, slug: string) {
+  revealListeners.forEach((l) => l(path, slug));
   openSection(path, slug);
   pending = sectionKey(path, slug);
   setTimeout(() => scrollToPending(path), 60);
