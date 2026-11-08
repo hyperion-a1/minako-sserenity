@@ -37,7 +37,7 @@ const STEPS = [
   { label: "Publicar", emoji: "🚀", sections: [] as string[] },
 ];
 /** Em qual passo fica a seção (as do bot ficam no último). */
-export const stepOf = (slug: string) => {
+const stepOf = (slug: string) => {
   const i = STEPS.findIndex((st) => st.sections.some((t) => slugify(t) === slug));
   return i === -1 ? STEPS.length - 1 : i;
 };
@@ -89,6 +89,10 @@ function GiveawaysPage() {
   useEffect(() => onReveal((path, slug) => {
     if (path === PATH) setStep(stepOf(slug));
   }), []);
+  useEffect(() => {
+    const t = setTimeout(() => openSection(PATH, slugify("O básico")), 0);
+    return () => clearTimeout(t);
+  }, []);
   const go = (i: number) => {
     playSound("nav");
     setStep(i);
