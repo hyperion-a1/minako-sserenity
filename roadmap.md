@@ -10,5 +10,5 @@
 - [x] Paleta Magical Girl (rosa, lilás, dourado).
 - [x] Mascote reagindo a estados.
 - [x] Sorteios em passos.
-- [ ] Ajustes finos Android.
+- [x] Ajustes finos Android.
 - [ ] Link de convite do bot (depende do proprietário).

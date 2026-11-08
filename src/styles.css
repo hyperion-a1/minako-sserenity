@@ -363,3 +363,31 @@
 @utility bg-magic {
   background-image: var(--gradient-magic);
 }
+
+/* Celular: teclado aberto esconde barras flutuantes; campos com 16px evitam zoom automático. */
+html.typing [data-hide-typing] {
+  display: none;
+}
+@media (max-width: 1023px) {
+  input,
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+  header {
+    padding-top: max(0.625rem, env(safe-area-inset-top));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html.typing [data-typing-bottom] {
+  bottom: 0.75rem;
+}

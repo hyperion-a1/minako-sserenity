@@ -1,6 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, Menu, ScrollText, ShieldCheck, LifeBuoy, LogIn, LogOut } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import mascot from "@/assets/minako-mascot.webp";
 import { Button } from "@/components/ui/button";
@@ -172,10 +172,35 @@ function LegalLinks({ className, onNavigate }: { className?: string; onNavigate?
 }
 
 
+/** No celular: enquanto o teclado está aberto, some com as barras flutuantes e mantém o campo visível. */
+function useTypingMode() {
+  useEffect(() => {
+    const isField = (el: EventTarget | null) =>
+      el instanceof HTMLElement && (el.matches("input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]), textarea, select, [contenteditable=true]"));
+    const onIn = (e: FocusEvent) => {
+      if (!isField(e.target) || window.innerWidth >= 1024) return;
+      document.documentElement.classList.add("typing");
+      const el = e.target as HTMLElement;
+      setTimeout(() => el.scrollIntoView({ block: "center", behavior: "smooth" }), 300);
+    };
+    const onOut = () => setTimeout(() => {
+      if (!isField(document.activeElement)) document.documentElement.classList.remove("typing");
+    }, 50);
+    document.addEventListener("focusin", onIn);
+    document.addEventListener("focusout", onOut);
+    return () => {
+      document.removeEventListener("focusin", onIn);
+      document.removeEventListener("focusout", onOut);
+      document.documentElement.classList.remove("typing");
+    };
+  }, []);
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isLegal = pathname === "/termos" || pathname === "/privacidade";
+  useTypingMode();
 
   return (
     <SearchProvider>
@@ -259,7 +284,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </footer>
       </div>
 
-      <div className="fixed bottom-[5.25rem] right-3 z-50 lg:bottom-5 lg:right-5">
+      <div data-hide-typing className="fixed bottom-[5.25rem] right-3 z-50 lg:bottom-5 lg:right-5">
         <AudioControl />
       </div>
       <MascotReaction />
