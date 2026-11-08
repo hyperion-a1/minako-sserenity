@@ -59,7 +59,7 @@ export function MascotReaction() {
   const img = mood === "sleepy" ? sleeping : mascot;
 
   return (
-    <div className={cn("pointer-events-none fixed left-3 z-40 flex items-end gap-2 transition-[bottom] duration-300 lg:left-[316px]", dirty ? "bottom-[10.5rem] lg:bottom-24" : "bottom-[5.25rem] lg:bottom-5")}>
+    <div data-hide-typing className={cn("pointer-events-none fixed left-3 z-40 flex items-end gap-2 transition-[bottom] duration-300 lg:left-[316px]", dirty ? "bottom-[10.5rem] lg:bottom-24" : "bottom-[5.25rem] lg:bottom-5")}>
       <button
         type="button"
         aria-label="Falar com a Minako"

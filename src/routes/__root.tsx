@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" },
       { title: "Minako Aino — Dashboard" },
       { name: "description", content: "Configure os recursos e ferramentas da Minako Aino, a bot aconchegante do seu servidor Discord." },
       { name: "author", content: "Minako Aino" },

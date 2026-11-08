@@ -204,11 +204,12 @@ export function BottomTabs({ onMenu }: { onMenu: () => void }) {
   const current = NAV_ITEMS.find((n) => n.to === pathname);
   const onModule = !!current && current.id !== "overview";
 
-  const tab = "flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-[1.25rem] py-1.5 font-display text-[11px] font-semibold transition-all duration-300 active:scale-90 [&>svg]:transition-transform [&.bg-secondary>svg]:-translate-y-0.5 [&.bg-secondary>svg]:text-primary-deep [&.bg-secondary]:shadow-squish-sm";
+  const tab = "flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 min-h-12 rounded-[1.25rem] py-1.5 font-display text-[11px] font-semibold transition-all duration-300 active:scale-90 [&>svg]:transition-transform [&.bg-secondary>svg]:-translate-y-0.5 [&.bg-secondary>svg]:text-primary-deep [&.bg-secondary]:shadow-squish-sm";
   return (
     <>
       <nav
         aria-label="Navegação rápida"
+        data-hide-typing
         className="fixed inset-x-0 bottom-0 z-40 border-t-2 border-border bg-background/95 px-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1.5 backdrop-blur lg:hidden"
       >
         <div className="mx-auto flex max-w-md gap-1">
