@@ -12,7 +12,7 @@ type Mood = "happy" | "worried" | "busy" | "sleepy" | "curious";
 
 /** Minako pequenininha no canto do painel, reagindo ao que acontece. */
 export function MascotReaction() {
-  const { loading, loadError, guildWarning, mode, dirty, lastSavedAt, guild } = useDashboard();
+  const { loading, loadError, guildWarning, mode, dirty, lastSavedAt } = useDashboard();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [bubble, setBubble] = useState<{ text: string; mood: Mood } | null>(null);
   const [hop, setHop] = useState(0);
@@ -45,9 +45,6 @@ export function MascotReaction() {
   useEffect(() => {
     if (dirty) say("Ooh, mudanças novas! Não esquece de salvar 💖", "curious", 3500);
   }, [dirty]);
-  useEffect(() => {
-    if (!loading && guild.id && mode === "live" && guild.channels.length === 0 && !guildWarning) return;
-  }, [loading, guild, mode, guildWarning]);
   useEffect(() => {
     if (pathname === "/painel/noturno") say("Hora de descansar os canais… zzz 💤", "sleepy");
   }, [pathname]);
