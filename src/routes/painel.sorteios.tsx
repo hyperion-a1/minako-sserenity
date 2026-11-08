@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CalendarClock, Gift, Megaphone, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarClock, Gift, Megaphone, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import {
   ChannelPicker,
@@ -24,7 +25,22 @@ import { PageHeader } from "@/components/minako/page-header";
 import { playSound } from "@/components/minako/use-sound";
 import { GIVEAWAY_DURATIONS } from "@/lib/minako/config";
 import { useDashboard } from "@/lib/minako/store";
+import { onReveal, openSection, slugify } from "@/lib/minako/sections";
 import { cn } from "@/lib/utils";
+
+const PATH = "/painel/sorteios";
+const STEPS = [
+  { label: "Básico", emoji: "🎁", sections: ["O básico"] },
+  { label: "Quando", emoji: "🗓️", sections: ["Quando e onde"] },
+  { label: "Quem", emoji: "🛡️", sections: ["Quem pode participar"] },
+  { label: "Anúncio", emoji: "📣", sections: ["Anúncio"] },
+  { label: "Publicar", emoji: "🚀", sections: [] as string[] },
+];
+/** Em qual passo fica a seção (as do bot ficam no último). */
+export const stepOf = (slug: string) => {
+  const i = STEPS.findIndex((st) => st.sections.some((t) => slugify(t) === slug));
+  return i === -1 ? STEPS.length - 1 : i;
+};
 
 export const Route = createFileRoute("/painel/sorteios")({
   head: () => ({
@@ -69,6 +85,18 @@ function GiveawaysPage() {
     const values: Record<string, string> = { giveaway: g.name, winners: String(g.winners), participants: "0", min: String(g.minParticipants), max: g.maxParticipants ? String(g.maxParticipants) : "∞", channel: channelName ? `#${channelName}` : "#sorteios", host: "@organizador", endrelative: durationLabel || "em breve", start: g.start === "scheduled" ? fmt(g.scheduledAt) : "Ao publicar", end: g.duration === "custom" ? fmt(g.endDate) : durationLabel || "", users: "@ganhadores" };
     return values[key] ?? whole;
   });
+  const [step, setStep] = useState(0);
+  useEffect(() => onReveal((path, slug) => {
+    if (path === PATH) setStep(stepOf(slug));
+  }), []);
+  const go = (i: number) => {
+    playSound("nav");
+    setStep(i);
+    const first = STEPS[i]!.sections[0];
+    if (first) openSection(PATH, slugify(first));
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  const stepErr = [err.name || err.winners || err.min || err.max, "", err.cd, err.blocks || err.color, ""];
   if (!nav) return null;
   return (
     <div className="space-y-5">
@@ -84,6 +112,28 @@ function GiveawaysPage() {
       />
 
       <div className={cn("space-y-5", !g.enabled && "pointer-events-none opacity-50")}>
+        <nav aria-label="Passos do sorteio" className="sticky top-[4.4rem] z-20 -mx-1 rounded-3xl border-2 border-border bg-background/90 p-1.5 backdrop-blur lg:top-3">
+          <ol className="grid grid-cols-5 gap-1">
+            {STEPS.map((st, i) => (
+              <li key={st.label}>
+                <button
+                  type="button"
+                  onClick={() => go(i)}
+                  aria-current={step === i ? "step" : undefined}
+                  className={cn(
+                    "relative flex min-h-12 w-full flex-col items-center justify-center rounded-2xl px-1 text-[11px] font-bold transition-all active:translate-y-0.5",
+                    step === i ? "bg-magic text-foreground shadow-squish-sm" : i < step ? "text-foreground" : "text-muted-foreground",
+                  )}
+                >
+                  <span className={cn("text-lg leading-none transition-transform", step === i && "scale-125")}>{i < step ? "✅" : st.emoji}</span>
+                  <span className="mt-0.5 truncate">{st.label}</span>
+                  {stepErr[i] && <span aria-label="tem erro" className="absolute right-1 top-1 h-2.5 w-2.5 rounded-full bg-destructive" />}
+                </button>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <div hidden={step !== 0}>
         <SectionCard title="O básico" description="Nome, ganhadores e participantes." icon={Gift} tone={nav.tone}>
           <TextField label="Nome do sorteio" value={g.name} onChange={(v) => set({ name: v })} maxLength={80} error={err.name} />
           <div className="grid gap-5 sm:grid-cols-3">
@@ -92,7 +142,9 @@ function GiveawaysPage() {
             <NumberField label="Máximo" value={g.maxParticipants} min={0} max={10000} step={10} onChange={(v) => set({ maxParticipants: v })} suffix="pessoas" hint="0 = sem limite" error={err.max} />
           </div>
         </SectionCard>
+        </div>
 
+        <div hidden={step !== 1}>
         <SectionCard title="Quando e onde" icon={CalendarClock} tone="bg-sky text-sky-foreground" delay={60}>
           <Segmented
             label="Começa"
@@ -136,7 +188,9 @@ function GiveawaysPage() {
             onChange={(v) => set({ privateThread: v })}
           />
         </SectionCard>
+        </div>
 
+        <div hidden={step !== 2}>
         <SectionCard title="Quem pode participar" icon={ShieldCheck} tone="bg-mint text-mint-foreground" delay={120}>
           <RolePicker label="Cargos permitidos" value={g.allowedRoles} onChange={(l) => set({ allowedRoles: l })} hint="Vazio = todo mundo pode." />
           <RolePicker label="Cargos bloqueados" value={g.blockedRoles} onChange={(l) => set({ blockedRoles: l })} hint="Bloqueio vence permissão." />
@@ -170,7 +224,9 @@ function GiveawaysPage() {
             />
           )}
         </SectionCard>
+        </div>
 
+        <div hidden={step !== 3}>
         <SectionCard title="Anúncio" description="Como o sorteio aparece no Discord." icon={Megaphone} tone="bg-primary text-primary-foreground" delay={180}>
           <div className="grid gap-5 lg:grid-cols-2">
             <div className="space-y-5">
@@ -243,8 +299,24 @@ function GiveawaysPage() {
             </div>
           </div>
         </SectionCard>
+        </div>
 
-        <GiveawayLive />
+        <div hidden={step !== 4} className="space-y-5">
+          <GiveawayLive />
+        </div>
+
+        <div className="flex gap-2">
+          {step > 0 && (
+            <button type="button" onClick={() => go(step - 1)} className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-2xl border-2 border-border bg-card font-display font-semibold shadow-squish-sm active:translate-y-0.5">
+              <ArrowLeft className="h-4 w-4" /> Voltar
+            </button>
+          )}
+          {step < STEPS.length - 1 && (
+            <button type="button" onClick={() => go(step + 1)} className="inline-flex min-h-12 flex-[2] items-center justify-center gap-2 rounded-2xl bg-primary font-display font-semibold text-primary-foreground shadow-squish-primary active:translate-y-1">
+              Próximo: {STEPS[step + 1]!.label} <ArrowRight className="h-4 w-4" />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
