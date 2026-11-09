@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, LogIn, Sparkles } from "lucide-react";
+import { ArrowRight, LogIn, Plus, Sparkles } from "lucide-react";
 
 import mascot from "@/assets/minako-mascot.webp";
 import sleeping from "@/assets/minako-sleeping.webp";
-import { CATEGORIES, NAV_ITEMS, SUPPORT_URL } from "@/components/minako/modules";
+import { CATEGORIES, INVITE_URL, NAV_ITEMS, SUPPORT_URL } from "@/components/minako/modules";
 import { playSound } from "@/components/minako/use-sound";
 import { useDashboard } from "@/lib/minako/store";
 
@@ -70,6 +70,10 @@ function Landing() {
                 </>
               )}
             </div>
+            <a href={INVITE_URL} target="_blank" rel="noreferrer" onClick={() => playSound("nav")} className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-lilac px-5 font-display font-semibold text-lilac-foreground shadow-squish-sm active:translate-y-0.5 sm:w-auto">
+              <Plus className="h-4 w-4" /> Adicionar ao servidor
+            </a>
+            <p className="text-xs text-muted-foreground">💌 Por enquanto, a Minako está disponível só para servidores selecionados.</p>
           </div>
           <div className="relative mx-auto w-56 sm:w-72">
             <span aria-hidden className="absolute inset-4 rounded-full bg-magic blur-2xl" />
