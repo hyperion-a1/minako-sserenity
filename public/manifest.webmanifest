@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "Minako Aino",
+  "short_name": "Minako",
+  "description": "O painel mágico da Minako Aino para seu servidor Discord.",
+  "lang": "pt-BR",
+  "start_url": "/painel",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#f6bd4b",
+  "background_color": "#fdf2f8",
+  "icons": [
+    { "src": "/icons/minako-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/minako-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/minako-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

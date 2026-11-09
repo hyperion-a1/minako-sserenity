@@ -12,3 +12,7 @@
 - [x] Sorteios em passos.
 - [x] Ajustes finos Android.
 - [x] Link de convite do bot.
+
+# Instalação na tela inicial
+- [x] Criar manifesto e ícones da Minako sem modo offline.
+- [x] Conferir abertura do painel e arquivos de instalação no navegador.
