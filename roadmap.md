@@ -14,5 +14,5 @@
 - [x] Link de convite do bot.
 
 # Instalação na tela inicial
-- [ ] Criar manifesto e ícones da Minako sem modo offline.
-- [ ] Conferir abertura do painel e arquivos de instalação no navegador.
+- [x] Criar manifesto e ícones da Minako sem modo offline.
+- [x] Conferir abertura do painel e arquivos de instalação no navegador.
