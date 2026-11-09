@@ -11,4 +11,4 @@
 - [x] Mascote reagindo a estados.
 - [x] Sorteios em passos.
 - [x] Ajustes finos Android.
-- [ ] Link de convite do bot (depende do proprietário).
+- [x] Link de convite do bot.

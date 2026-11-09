@@ -70,4 +70,6 @@ export const MINAKO_PHRASES = [
 ];
 
 export const SUPPORT_URL = "https://discord.gg/sserenity-hok";
+export const INVITE_URL =
+  "https://discord.com/oauth2/authorize?client_id=1555750892018339840&permissions=8&integration_type=0&scope=bot+applications.commands";
 export const CONTACT_EMAIL = "hyperion.vermilyon@gmail.com";
