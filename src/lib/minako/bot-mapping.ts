@@ -1,7 +1,7 @@
 // Converte entre o formato do painel (MinakoConfig) e o formato que a API do bot
 // (activity/server.mjs → /api/dashboard) aceita. O painel inteiro também é enviado em
 // `panel`, que o bot guarda como está e devolve no próximo carregamento.
-import { mergeWithDefaults, type DemoChannel, type DemoGuild, type DemoRole, type MinakoConfig } from "./config";
+import { DEFAULT_GIVEAWAY_PRIVATE_MESSAGE, mergeWithDefaults, type DemoChannel, type DemoGuild, type DemoRole, type MinakoConfig } from "./config";
 import { readGiveawayBlocks } from "./giveaway-message";
 
 export type BotConfig = Record<string, unknown>;
@@ -125,7 +125,7 @@ export function toBotGiveaway(g: Giveaways): Record<string, unknown> {
     giveawayChannel: g.channel ?? "",
     giveawayPin: g.pin,
     giveawayPrivateThread: g.privateThread,
-    giveawayPrivateMessage: "",
+    giveawayPrivateMessage: str(g.privateMessage).trim() ? g.privateMessage : DEFAULT_GIVEAWAY_PRIVATE_MESSAGE,
     giveawayMessage: g.message,
     giveawayMessageBlocks: g.messageBlocks,
     giveawayColor: g.color,
@@ -156,6 +156,7 @@ export function fromBotGiveaway(input: Record<string, unknown>, current: Giveawa
     channel: str(b["giveawayChannel"]) || null,
     pin: Boolean(b["giveawayPin"]),
     privateThread: Boolean(b["giveawayPrivateThread"]),
+    privateMessage: str(b["giveawayPrivateMessage"]).trim() ? str(b["giveawayPrivateMessage"]) : DEFAULT_GIVEAWAY_PRIVATE_MESSAGE,
     message: str(b["giveawayMessage"]) || current.message,
     messageBlocks: readGiveawayBlocks(b["giveawayMessageBlocks"]),
     color: str(b["giveawayColor"]) || current.color,

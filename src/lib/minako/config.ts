@@ -13,6 +13,9 @@ export type ModuleId =
   | "sorteios"
   | "tiktok";
 
+/** Mesmo texto padrão de giveawayCore.DEFAULT_THREAD_MESSAGE no bot. */
+export const DEFAULT_GIVEAWAY_PRIVATE_MESSAGE = "Parabéns {users}! 🎉 Vocês ganharam **{giveaway}**. {host} vai combinar a entrega por aqui.";
+
 export interface MinakoConfig {
   week: { startDay: number; startTime: string; timezone: string };
   channels: { moderation: string | null; publication: string | null };
@@ -56,6 +59,7 @@ export interface MinakoConfig {
     rulesScope: "local" | "global";
     pin: boolean;
     privateThread: boolean;
+    privateMessage: string;
     message: string;
     messageBlocks: GiveawayBlock[];
     color: string;
@@ -114,6 +118,7 @@ export const DEFAULT_CONFIG: MinakoConfig = {
     rulesScope: "local",
     pin: false,
     privateThread: true,
+    privateMessage: DEFAULT_GIVEAWAY_PRIVATE_MESSAGE,
     message: "🎁 Sorteio especial da comunidade!\nClique no botão para participar e boa sorte! ✨",
     messageBlocks: [],
     color: "#f6bd4b",
@@ -147,6 +152,7 @@ export function mergeWithDefaults(stored: unknown): MinakoConfig {
     }
   }
   base.giveaways.messageBlocks = readGiveawayBlocks(base.giveaways.messageBlocks);
+  if (typeof base.giveaways.privateMessage !== "string") base.giveaways.privateMessage = DEFAULT_GIVEAWAY_PRIVATE_MESSAGE;
   return base;
 }
 

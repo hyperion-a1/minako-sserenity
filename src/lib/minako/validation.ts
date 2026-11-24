@@ -142,7 +142,7 @@ export function validateGiveawayLaunch(g: MinakoConfig["giveaways"], now = Date.
   return errors;
 }
 
-export const GIVEAWAY_MESSAGE_LIMITS = { blocks: 12, text: 1500, totalText: 3000, gallery: 10, components: 32, url: 500 } as const;
+export const GIVEAWAY_MESSAGE_LIMITS = { blocks: 12, text: 1500, totalText: 3000, gallery: 10, components: 32, url: 500, privateText: 1800 } as const;
 
 export function isValidMediaUrl(value: string): boolean {
   const s = value.trim();
@@ -150,9 +150,11 @@ export function isValidMediaUrl(value: string): boolean {
   try { return new URL(s).protocol === "https:"; } catch { return false; }
 }
 
-export function validateGiveawayMessage(g: Pick<MinakoConfig["giveaways"], "message" | "messageBlocks">): string[] {
+export function validateGiveawayMessage(g: Pick<MinakoConfig["giveaways"], "message" | "messageBlocks"> & Partial<Pick<MinakoConfig["giveaways"], "privateThread" | "privateMessage">>): string[] {
   const blocks: GiveawayBlock[] = g.messageBlocks?.length ? g.messageBlocks : [{ type: "text", content: g.message }];
   const errors: string[] = [];
+  if (g.privateThread && typeof g.privateMessage === "string" && g.privateMessage.length > GIVEAWAY_MESSAGE_LIMITS.privateText)
+    errors.push("A mensagem do tópico privado pode ter até 1.800 caracteres.");
   if (blocks.length > GIVEAWAY_MESSAGE_LIMITS.blocks) errors.push("Use no máximo 12 blocos na mensagem.");
   let total = 0;
   let components = 0;

@@ -98,6 +98,14 @@ describe("Documentos legais", () => {
 
 describe("Mensagem V2 de sorteios", () => {
   const check = (messageBlocks: GiveawayBlock[]) => validateGiveawayMessage({ message: "Mensagem", messageBlocks });
+  it("mensagem privada aceita 1800 caracteres e recusa 1801 antes de enviar ao bot", () => {
+    const g = { ...cloneConfig(DEFAULT_CONFIG).giveaways, privateThread: true, privateMessage: "a".repeat(1800) };
+    expect(validateGiveawayMessage(g)).toEqual([]);
+    expect(validateGiveawayMessage({ ...g, privateMessage: "a".repeat(1801) })).toContain("A mensagem do tópico privado pode ter até 1.800 caracteres.");
+  });
+  it("mensagem privada vazia é permitida pois a conversão envia o padrão", () => {
+    expect(validateGiveawayMessage({ ...DEFAULT_CONFIG.giveaways, privateThread: true, privateMessage: "" })).toEqual([]);
+  });
   it("aceita os quatro tipos do bot", () => {
     expect(check([{ type: "text", content: "Prêmio" }, { type: "section", content: "Detalhes", thumbnail: "https://example.com/item.png" }, { type: "separator", divider: false, spacing: "large" }, { type: "gallery", urls: ["https://example.com/prize.png"] }])).toEqual([]);
   });

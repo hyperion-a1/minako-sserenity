@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { botWeekDay, fromBotConfig, toBotPayload } from "@/lib/minako/bot-mapping";
-import { DEFAULT_CONFIG, cloneConfig } from "@/lib/minako/config";
+import { DEFAULT_CONFIG, DEFAULT_GIVEAWAY_PRIVATE_MESSAGE, cloneConfig, mergeWithDefaults } from "@/lib/minako/config";
 
 describe("Conversão painel ↔ bot", () => {
   it("o bot só aceita domingo, segunda ou sábado como início da semana", () => {
@@ -52,6 +52,32 @@ describe("Sorteios", () => {
   it("modelo antigo remove os blocos do rascunho anterior", () => {
     const current = { ...base(), messageBlocks: [{ type: "text" as const, content: "Rascunho" }] };
     expect(fromBotGiveaway({ giveawayMessage: "Antigo" }, current).messageBlocks).toEqual([]);
+  });
+
+  it.each(["", "   \n\t"])("tópico privado com mensagem %j envia o texto padrão, nunca vazio", (privateMessage) => {
+    const payload = toBotGiveaway({ ...base(), privateThread: true, privateMessage });
+    expect(payload["giveawayPrivateThread"]).toBe(true);
+    expect(payload["giveawayPrivateMessage"]).toBe("Parabéns {users}! 🎉 Vocês ganharam **{giveaway}**. {host} vai combinar a entrega por aqui.");
+  });
+
+  it("mensagem privada personalizada vai e volta no modelo sem perder placeholders", () => {
+    const g = { ...base(), privateThread: true, privateMessage: "Oi {users}! Falem com {host} sobre {giveaway}." };
+    expect(toBotGiveaway(g)["giveawayPrivateMessage"]).toBe(g.privateMessage);
+    expect(fromBotGiveaway(toBotGiveaway(g), base())).toEqual(g);
+  });
+
+  it.each([{}, { giveawayPrivateMessage: "" }, { giveawayPrivateMessage: " \n " }])("modelo sem mensagem privada usa o padrão, não o texto do modelo anterior", (input) => {
+    expect(fromBotGiveaway(input, { ...base(), privateMessage: "Texto anterior" }).privateMessage).toBe(DEFAULT_GIVEAWAY_PRIVATE_MESSAGE);
+  });
+
+  it("rascunhos antigos recebem a mensagem privada padrão ao carregar", () => {
+    expect(mergeWithDefaults({ giveaways: { privateThread: true } }).giveaways.privateMessage).toBe(DEFAULT_GIVEAWAY_PRIVATE_MESSAGE);
+  });
+
+  it("rascunho completo salvo preserva mensagem personalizada", () => {
+    const c = cloneConfig(DEFAULT_CONFIG);
+    c.giveaways.privateMessage = "Entrega de {giveaway} com {host}.";
+    expect(fromBotConfig(toBotPayload(c)).giveaways.privateMessage).toBe(c.giveaways.privateMessage);
   });
 
   it("horário de Brasília é UTC-3", () => {

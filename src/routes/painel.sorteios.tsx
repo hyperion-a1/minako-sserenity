@@ -24,6 +24,7 @@ import { NAV_ITEMS } from "@/components/minako/modules";
 import { PageHeader } from "@/components/minako/page-header";
 import { playSound } from "@/components/minako/use-sound";
 import { GIVEAWAY_DURATIONS } from "@/lib/minako/config";
+import { GIVEAWAY_MESSAGE_LIMITS } from "@/lib/minako/validation";
 import { useDashboard } from "@/lib/minako/store";
 import { onReveal, openSection, slugify } from "@/lib/minako/sections";
 import { cn } from "@/lib/utils";
@@ -191,6 +192,16 @@ function GiveawaysPage() {
             checked={g.privateThread}
             onChange={(v) => set({ privateThread: v })}
           />
+          {g.privateThread && (
+            <TextAreaField
+              label="Mensagem para os ganhadores"
+              value={g.privateMessage}
+              onChange={(v) => set({ privateMessage: v })}
+              rows={4}
+              maxLength={GIVEAWAY_MESSAGE_LIMITS.privateText}
+              hint="Se deixar vazio, a Minako envia a mensagem padrão de parabéns."
+            />
+          )}
         </SectionCard>
         </div>
 
