@@ -1,7 +1,8 @@
 # Personalização de sorteios
 - [x] Conferir o contrato de tópicos privados e impedir mensagem vazia no envio de sorteios/modelos.
 - [x] Testar a conversão, handlers com API simulada e a configuração de tópicos privados no painel.
-- [ ] Confirmar a entrega no Discord e tratar sorteios antigos com mensagem vazia (depende de uma sessão Discord válida e acesso ao bot hospedado; testes locais não alteram sorteios existentes).
+- [x] Preparar correção do bot (texto padrão ao normalizar, ao receber do painel e ao enviar no tópico).
+- [ ] Aplicar a correção do bot no Shardweb e confirmar a entrega real no Discord (depende do proprietário).
 - [x] Confirmar o formato de componentes V2 aceito pelo bot.
 - [x] Adicionar editor de blocos e prévia com emojis personalizados.
 - [x] Preservar os blocos em configurações e modelos e validar o envio.
